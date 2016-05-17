@@ -12,6 +12,7 @@ namespace ncch
 {
     public partial class Form1 : Form
     {
+       /*
         Label[] index;
         Label[] Monday;
         Label[] Tuesday;
@@ -20,41 +21,69 @@ namespace ncch
         Label[] Friday;
         Label[] Saturday;
         Label[] Sunday;
-
+       */
         Label[][] classTable;
     
         public Form1()
         {
             InitializeComponent();
-            initialTable();
+            initialGui();
         }
 
-        private void initialTable()
+        private void initialGui()
         {           
             //  initial the table of class
+           
+
             
             classTable=new Label [8][];
 
             for(int i=0;i<8;i++){
-                classTable[i]=new Label[13];
-                for(int j=0;j<13;j++){
+                classTable[i]=new Label[14];
+                for(int j=0;j<14;j++){
                     classTable[i][j]=new Label();
                     classTable[i][j].Visible=true;
                     classTable[i][j].BackColor=Color.White;
-                    this.tableLayoutPanel1.Controls.Add(this.classTable[i][j],i,j);
-                    classTable[i][j].Text=i.ToString()+","+j.ToString();
+                    this.tableLayoutPanel1.Controls.Add(classTable[i][j],i,j);
+                   // classTable[i][j].Text=i.ToString()+","+j.ToString();      //  to test the label location
+                    classTable[i][j].AutoSize = true;
                 }
             }
 
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetDouble;
-            
-            
-            
-            
-            
-            
-            
-            
+            for (int i = 1; i < 11; i++)
+            {
+                classTable[0][i].Text = "第 "+(i-1).ToString()+" 節";
+
+            }
+
+            classTable[0][11].Text = "第A節";
+            classTable[0][12].Text = "第B節";
+            classTable[0][13].Text = "第C節";
+       
+
+            classTable[1][0].Text = "星期一";
+            classTable[2][0] .Text= "星期二";
+            classTable[3][0] .Text= "星期三";
+            classTable[4][0] .Text= "星期四";
+            classTable[5][0] .Text= "星期五";
+            classTable[6][0] .Text= "星期六";
+            classTable[7][0] .Text= "星期日";
+
+            comboBoxGrade.Items.Add("1");
+            comboBoxGrade.Items.Add("2");
+            comboBoxGrade.Items.Add("3");
+            comboBoxGrade.Items.Add("4");
+
+            comboBoxClass.Items.Add("甲班");
+            comboBoxClass.Items.Add("乙班");
+            comboBoxClass.Items.Add("丙班");
+
+
+
+
+
+
             
             /*   index=new Label[13];                       //creat label array
              Monday=new Label[13];
@@ -109,6 +138,16 @@ namespace ncch
         }
         
         private void buttonUpdate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxDepartment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBoxGrade_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
