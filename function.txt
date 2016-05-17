@@ -1,4 +1,4 @@
 update   --fatch data from net to data
-load default class form  --必修
+load default class table  --必修
 選修OR通識 列表  maybe serch
 *拉課表  
