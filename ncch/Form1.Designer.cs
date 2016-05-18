@@ -30,7 +30,6 @@
         {
             this.buttonUpdate = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.comboBoxGrade = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,6 +40,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.comboBoxDepartment = new System.Windows.Forms.ComboBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.serch = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonUpdate
@@ -82,15 +84,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(415, 531);
             this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(474, 154);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(466, 412);
-            this.listBox1.TabIndex = 2;
             // 
             // comboBoxGrade
             // 
@@ -159,7 +152,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 13;
-            this.label4.Text = "查看科系";
+            this.label4.Text = "查看系所";
             // 
             // label5
             // 
@@ -177,11 +170,31 @@
             this.comboBoxDepartment.Size = new System.Drawing.Size(76, 20);
             this.comboBoxDepartment.TabIndex = 4;
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(450, 169);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(502, 419);
+            this.dataGridView1.TabIndex = 14;
+            // 
+            // serch
+            // 
+            this.serch.Location = new System.Drawing.Point(877, 125);
+            this.serch.Name = "serch";
+            this.serch.Size = new System.Drawing.Size(75, 23);
+            this.serch.TabIndex = 15;
+            this.serch.Text = "查詢";
+            this.serch.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(976, 600);
+            this.Controls.Add(this.serch);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBoxShow);
@@ -192,11 +205,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBoxGrade);
             this.Controls.Add(this.comboBoxDepartment);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.buttonUpdate);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "NCKU 選課小幫手";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -206,7 +219,6 @@
 
         private System.Windows.Forms.Button buttonUpdate;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ComboBox comboBoxGrade;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -217,6 +229,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox comboBoxDepartment;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button serch;
     }
 }
 

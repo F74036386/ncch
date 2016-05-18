@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Net;
+
 
 namespace ncch
 {
@@ -23,6 +26,7 @@ namespace ncch
         Label[] Sunday;
        */
         Label[][] classTable;
+        string mainUrl;
     
         public Form1()
         {
@@ -30,11 +34,29 @@ namespace ncch
             initialGui();
         }
 
+
+
+        private void setComboBox()
+        {
+            comboBoxGrade.Items.Add("1");
+            comboBoxGrade.Items.Add("2");
+            comboBoxGrade.Items.Add("3");
+            comboBoxGrade.Items.Add("4");
+
+            comboBoxClass.Items.Add("甲班");
+            comboBoxClass.Items.Add("乙班");
+            comboBoxClass.Items.Add("丙班");
+
+          //  comboBoxDepartment.Items.Add();
+
+        }
+
+
         private void initialGui()
         {           
             //  initial the table of class
            
-
+          
             
             classTable=new Label [8][];
 
@@ -44,13 +66,13 @@ namespace ncch
                     classTable[i][j]=new Label();
                     classTable[i][j].Visible=true;
                     classTable[i][j].BackColor=Color.White;
-                    this.tableLayoutPanel1.Controls.Add(classTable[i][j],i,j);
+                    tableLayoutPanel1.Controls.Add(classTable[i][j],i,j);
                    // classTable[i][j].Text=i.ToString()+","+j.ToString();      //  to test the label location
                     classTable[i][j].AutoSize = true;
                 }
             }
 
-            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetDouble;
+            tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             for (int i = 1; i < 11; i++)
             {
                 classTable[0][i].Text = "第 "+(i-1).ToString()+" 節";
@@ -70,15 +92,9 @@ namespace ncch
             classTable[6][0] .Text= "星期六";
             classTable[7][0] .Text= "星期日";
 
-            comboBoxGrade.Items.Add("1");
-            comboBoxGrade.Items.Add("2");
-            comboBoxGrade.Items.Add("3");
-            comboBoxGrade.Items.Add("4");
 
-            comboBoxClass.Items.Add("甲班");
-            comboBoxClass.Items.Add("乙班");
-            comboBoxClass.Items.Add("丙班");
 
+            setComboBox();
 
 
 
@@ -139,6 +155,16 @@ namespace ncch
         
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
+            StreamWriter sw=new StreamWriter(@"./classhtml.txt");
+          
+
+          using (WebClient client = new WebClient())
+         {
+            string htmlCode = client.DownloadString(mainUrl);
+            sw.Write(htmlCode);
+         }
+          sw.Flush();
+          sw.Close();
 
         }
 
