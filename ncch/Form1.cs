@@ -9,31 +9,31 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 
 
 namespace ncch
 {
     public partial class Form1 : Form
     {
-       /*
-        Label[] index;
-        Label[] Monday;
-        Label[] Tuesday;
-        Label[] Wednesday;
-        Label[] Thursday;
-        Label[] Friday;
-        Label[] Saturday;
-        Label[] Sunday;
-       */
+        /*
+         Label[] index;
+         Label[] Monday;
+         Label[] Tuesday;
+         Label[] Wednesday;
+         Label[] Thursday;
+         Label[] Friday;
+         Label[] Saturday;
+         Label[] Sunday;
+        */
         Label[][] classTable;
         string mainUrl;
-    
+
         public Form1()
         {
             InitializeComponent();
             initialGui();
         }
-
 
 
         private void setComboBox()
@@ -47,27 +47,26 @@ namespace ncch
             comboBoxClass.Items.Add("乙班");
             comboBoxClass.Items.Add("丙班");
 
-          //  comboBoxDepartment.Items.Add();
+            //  comboBoxDepartment.Items.Add();
 
         }
 
 
         private void initialGui()
-        {           
+        {
             //  initial the table of class
-           
-          
-            
-            classTable=new Label [8][];
+            classTable = new Label[8][];
 
-            for(int i=0;i<8;i++){
-                classTable[i]=new Label[14];
-                for(int j=0;j<14;j++){
-                    classTable[i][j]=new Label();
-                    classTable[i][j].Visible=true;
-                    classTable[i][j].BackColor=Color.White;
-                    tableLayoutPanel1.Controls.Add(classTable[i][j],i,j);
-                   // classTable[i][j].Text=i.ToString()+","+j.ToString();      //  to test the label location
+            for (int i = 0; i < 8; i++)
+            {
+                classTable[i] = new Label[14];
+                for (int j = 0; j < 14; j++)
+                {
+                    classTable[i][j] = new Label();
+                    classTable[i][j].Visible = true;
+                    classTable[i][j].BackColor = Color.White;
+                    tableLayoutPanel1.Controls.Add(classTable[i][j], i, j);
+                    // classTable[i][j].Text=i.ToString()+","+j.ToString();      //  to test the label location
                     classTable[i][j].AutoSize = true;
                 }
             }
@@ -75,32 +74,25 @@ namespace ncch
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             for (int i = 1; i < 11; i++)
             {
-                classTable[0][i].Text = "第 "+(i-1).ToString()+" 節";
+                classTable[0][i].Text = "第 " + (i - 1).ToString() + " 節";
 
             }
 
             classTable[0][11].Text = "第A節";
             classTable[0][12].Text = "第B節";
             classTable[0][13].Text = "第C節";
-       
+
 
             classTable[1][0].Text = "星期一";
-            classTable[2][0] .Text= "星期二";
-            classTable[3][0] .Text= "星期三";
-            classTable[4][0] .Text= "星期四";
-            classTable[5][0] .Text= "星期五";
-            classTable[6][0] .Text= "星期六";
-            classTable[7][0] .Text= "星期日";
-
-
+            classTable[2][0].Text = "星期二";
+            classTable[3][0].Text = "星期三";
+            classTable[4][0].Text = "星期四";
+            classTable[5][0].Text = "星期五";
+            classTable[6][0].Text = "星期六";
+            classTable[7][0].Text = "星期日";
 
             setComboBox();
 
-
-
-
-
-            
             /*   index=new Label[13];                       //creat label array
              Monday=new Label[13];
              Tuesday = new Label[13];
@@ -152,20 +144,13 @@ namespace ncch
              * */
 
         }
-        
+
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            StreamWriter sw=new StreamWriter(@"./classhtml.txt");
-          
+            StreamWriter sw = new StreamWriter(@"./classhtml.txt");
 
-          using (WebClient client = new WebClient())
-         {
-            string htmlCode = client.DownloadString(mainUrl);
-            sw.Write(htmlCode);
-         }
-          sw.Flush();
-          sw.Close();
-
+            //fatchMenu();
+            fatchCourse("A9");
         }
 
         private void comboBoxDepartment_SelectedIndexChanged(object sender, EventArgs e)
@@ -176,6 +161,166 @@ namespace ncch
         private void comboBoxGrade_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void fatchMenu()
+        {
+            if (backgroundFatchMenu.IsBusy == false)
+            {
+                backgroundFatchMenu.RunWorkerAsync();
+            }
+        }
+
+        private void backgroundFatchMenu_DoWork(object sender, DoWorkEventArgs e)
+        {   //implement by backgroundWorker (thread)
+            Regex findLSpaces = new Regex(@"\s*\(\s*", RegexOptions.Compiled);
+            Regex findRSpaces = new Regex(@"\s*）\s*", RegexOptions.Compiled);
+            Regex findUnnecessarySpaces = new Regex(@"\s+", RegexOptions.Compiled);
+            Regex findTitle = new Regex(@">.*<", RegexOptions.Compiled);
+
+            Console.WriteLine(">start fatching");
+            WebClient web = new WebClient();
+            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/");
+            Console.WriteLine(">download finished");
+
+            //change encoding
+            string input = Encoding.UTF8.GetString(html);
+
+            string[] lines = Regex.Split(input, "\n");
+
+            Console.WriteLine(">matching data...");
+            MatchCollection datas = null;
+            int idx;
+            for (idx = 0; idx < lines.Length; idx++)
+            {
+                if (Regex.IsMatch(lines[idx], "課程資訊請洽超連結網頁之相關人員!"))
+                {
+                    break;
+                }
+            }
+
+            for (; idx < lines.Length; idx++)
+            {
+                if (Regex.IsMatch(lines[idx], "<li>"))
+                {
+                    datas = Regex.Matches(lines[idx], @"<a.*?a>");
+                    break;
+                }
+            }
+
+            if (idx >= lines.Length || datas == null)
+            {
+                //failed
+                Console.WriteLine(">failed to match data");
+                return;
+            }
+
+            StreamWriter fout = new StreamWriter("tempOut.txt");    //for debug
+
+            string tmp;
+            foreach (Match cur in datas)
+            {
+                tmp = findTitle.Match(cur.Value).Value;
+                tmp = findLSpaces.Replace(tmp, "(");
+                tmp = findRSpaces.Replace(tmp, ")");
+                tmp = findUnnecessarySpaces.Replace(tmp, " ");
+                string title = tmp.Substring(5, tmp.Length - 6);
+                string id = tmp.Substring(2, 2);
+
+                fout.WriteLine(id + "\t" + title);
+            }
+
+            fout.Flush(); fout.Close();
+
+            Console.WriteLine(">done!");
+        }
+
+        private void fatchCourse(string depr)
+        {
+            if (backgroundFatchCourse.IsBusy == false)
+            {
+                backgroundFatchCourse.RunWorkerAsync(depr);
+            }
+        }
+
+        private void backgroundFatchCourse_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Regex findHtmlTag = new Regex(@"<.*?>", RegexOptions.Compiled);
+            Regex findTD = new Regex(@"<TD.*?TD>", RegexOptions.Compiled);
+
+            Console.WriteLine(">start fatching");
+            WebClient web = new WebClient();
+            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + (string)e.Argument);
+            Console.WriteLine(">download finished");
+
+            string input = Encoding.UTF8.GetString(html);
+
+            string[] lines = Regex.Split(input, "\n");
+
+            StreamWriter fout = new StreamWriter("courseOut.txt");
+
+            int i = 0;
+            string id = null,
+                cls = null,
+                grade = null,
+                type = null,
+                english = null,
+                name = null,
+                necessary = null,
+                point = null,
+                teacher = null,
+                time = null,
+                place = null,
+                other = null;
+
+            foreach (string cur in lines)
+            {   //bug here
+                if (findTD.IsMatch(cur))
+                {
+                    switch (++i)
+                    {
+                        case 3:
+                            id = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 6:
+                            cls = findHtmlTag.Replace(cur, ""); ;
+                            break;
+                        case 7:
+                            grade = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 8:
+                            type = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 10:
+                            english = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 11:
+                            name = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 12:
+                            necessary = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 13:
+                            string tmp = findHtmlTag.Replace(cur, "");
+                            point = tmp.Substring(1, 1);
+                            teacher = tmp.Substring(2);
+                            break;
+                        case 16:
+                            time = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 17:
+                            place = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 18:
+                            other = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 20:
+                            i = 0;
+                            Console.WriteLine(id + "\t" + cls + "\t" + grade + "\t" + type + "\t" + english + "\t" + name + "\t" + necessary + "\t" + point + "\t" + teacher + "\t" + time + "\t" + place + "\t" + other);
+                            break;
+                    }
+                }
+            }
         }
     }
 }
