@@ -16,7 +16,7 @@ namespace ncch
 {
     public partial class Form1 : Form
     {
- 
+
         Label[][] classTable;
 
         public Form1()
@@ -36,8 +36,6 @@ namespace ncch
             comboBoxClass.Items.Add("甲班");
             comboBoxClass.Items.Add("乙班");
             comboBoxClass.Items.Add("丙班");
-
-            //  comboBoxDepartment.Items.Add();
 
         }
 
@@ -84,14 +82,15 @@ namespace ncch
             setComboBox();
 
 
-
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
 
+
             fatchMenu();
             fatchCourse("A9"); 
+
         }
 
         private void comboBoxDepartment_SelectedIndexChanged(object sender, EventArgs e)
@@ -221,7 +220,7 @@ namespace ncch
                     switch (++i)
                     {
                         case 3:
-                            id = findHtmlTag.Replace(cur, "");
+                            id = (string)e.Argument + findHtmlTag.Replace(cur, "");
                             break;
                         case 6:
                             cls = findHtmlTag.Replace(cur, ""); ;
@@ -255,7 +254,7 @@ namespace ncch
                         case 18:
                             other = findHtmlTag.Replace(cur, "");
                             break;
-                        case 20:
+                        case 23:
                             i = 0;
                             fout.WriteLine(id + "\t" + cls + "\t" + grade + "\t" + type + "\t" + english + "\t" + name + "\t" + necessary + "\t" + point + "\t" + teacher + "\t" + time + "\t" + place + "\t" + other);
                             break;
