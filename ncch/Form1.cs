@@ -252,7 +252,7 @@ namespace ncch
                             break;
                         case 23:
                             i = 0;
-                            Console.WriteLine(id + "\t" + cls + "\t" + grade + "\t" + type + "\t" + english + "\t" + name + "\t" + necessary + "\t" + point + "\t" + teacher + "\t" + time + "\t" + place + "\t" + other);
+                            fout.WriteLine(id + "\t" + cls + "\t" + grade + "\t" + type + "\t" + english + "\t" + name + "\t" + necessary + "\t" + point + "\t" + teacher + "\t" + time + "\t" + place + "\t" + other);
                             break;
                     }
                 }
