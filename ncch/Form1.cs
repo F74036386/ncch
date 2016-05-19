@@ -282,6 +282,8 @@ namespace ncch
                     }
                 }
             }
+            fout.Flush();
+            fout.Close();
         }
     }
 }
