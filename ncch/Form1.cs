@@ -242,8 +242,8 @@ namespace ncch
                             break;
                         case 13:
                             string tmp = findHtmlTag.Replace(cur, "");
-                            point = tmp.Substring(1, 1);
-                            teacher = tmp.Substring(2);
+                            point = tmp.Substring(0, 1);
+                            teacher = tmp.Substring(1);
                             break;
                         case 16:
                             time = findHtmlTag.Replace(cur, "");
