@@ -26,8 +26,8 @@ namespace ncch
         }
 
 
-        private void setComboBox()
-        {
+        private void initComboBox()
+        {   
             comboBoxGrade.Items.Add("1");
             comboBoxGrade.Items.Add("2");
             comboBoxGrade.Items.Add("3");
@@ -36,6 +36,26 @@ namespace ncch
             comboBoxClass.Items.Add("甲班");
             comboBoxClass.Items.Add("乙班");
             comboBoxClass.Items.Add("丙班");
+
+            StreamReader sr = new StreamReader(@"../../data/departmentName.txt");
+
+            string tem = sr.ReadLine();
+
+            while (tem != null)
+            {
+                comboBoxDepartment.Items.Add(tem);
+                tem = sr.ReadLine();
+
+            }
+            sr.Close();
+            comboBoxClass.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxDepartment.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxGrade.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxDepartment.SelectedIndex = 0;
+            comboBoxGrade.SelectedIndex = 0;
+            comboBoxClass.SelectedIndex = 0;
+
+
 
         }
 
@@ -79,7 +99,8 @@ namespace ncch
             classTable[6][0].Text = "星期六";
             classTable[7][0].Text = "星期日";
 
-            setComboBox();
+            initComboBox();
+
 
 
         }

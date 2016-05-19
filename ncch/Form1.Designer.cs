@@ -99,7 +99,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(532, 41);
+            this.label2.Location = new System.Drawing.Point(505, 41);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 12);
             this.label2.TabIndex = 7;
@@ -168,9 +168,9 @@
             // comboBoxDepartment
             // 
             this.comboBoxDepartment.FormattingEnabled = true;
-            this.comboBoxDepartment.Location = new System.Drawing.Point(511, 70);
+            this.comboBoxDepartment.Location = new System.Drawing.Point(461, 70);
             this.comboBoxDepartment.Name = "comboBoxDepartment";
-            this.comboBoxDepartment.Size = new System.Drawing.Size(76, 20);
+            this.comboBoxDepartment.Size = new System.Drawing.Size(126, 20);
             this.comboBoxDepartment.TabIndex = 4;
             // 
             // dataGridView1
