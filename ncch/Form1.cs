@@ -36,7 +36,18 @@ namespace ncch
             comboBoxClass.Items.Add("甲班");
             comboBoxClass.Items.Add("乙班");
             comboBoxClass.Items.Add("丙班");
+    /*
+            if(!Directory.Exists(@"./data")){
+                StreamReader sr1 = new StreamReader(@"tempOut.txt");
+                string tem1 = sr1.ReadLine();
+                while (tem1 != null)
+                {
 
+
+                    tem1 = sr1.ReadLine();
+                }
+            }
+            */
             StreamReader sr = new StreamReader(@"../../data/departmentName.txt");
 
             string tem = sr.ReadLine();
