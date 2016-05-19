@@ -16,8 +16,8 @@ namespace ncch
 {
     public partial class Form1 : Form
     {
+
         Label[][] classTable;
-        string mainUrl;
 
         public Form1()
         {
@@ -81,12 +81,16 @@ namespace ncch
 
             setComboBox();
 
+
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
-            //fatchMenu();
-            fatchCourse("A9");
+
+
+            fatchMenu();
+            fatchCourse("A9"); 
+
         }
 
         private void comboBoxDepartment_SelectedIndexChanged(object sender, EventArgs e)
