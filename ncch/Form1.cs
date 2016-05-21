@@ -18,9 +18,12 @@ namespace ncch
     {
 
         Label[][] classTable;
+        bool isTemOutBusy;
 
         public Form1()
         {
+            isTemOutBusy = false;
+            Console.WriteLine("hh");
             InitializeComponent();
             initialGui();
         }
@@ -36,19 +39,75 @@ namespace ncch
             comboBoxClass.Items.Add("甲班");
             comboBoxClass.Items.Add("乙班");
             comboBoxClass.Items.Add("丙班");
-    /*
+          
+          
+
+            
             if(!Directory.Exists(@"./data")){
+                Directory.CreateDirectory(@"./data");
+            }
+            if(File.Exists(@"./dataGridView1/departmentName.txt"))
+            {
+                isTemOutBusy = true;
+ 
+                fatchMenu();
+      
+                while (isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
+        
                 StreamReader sr1 = new StreamReader(@"tempOut.txt");
+               
+                StreamWriter sw1 = new StreamWriter(@"./data/departmentName.txt");
+
                 string tem1 = sr1.ReadLine();
+                
                 while (tem1 != null)
                 {
+                    char[] temch = tem1.ToCharArray();
 
+                    if (temch[0] == 'A')
+                    {
+                        tem1 = sr1.ReadLine(); 
+                        continue;
+                    }
+                    else if (temch[0] == 'Z' && temch[1] == '0')
+                    {
+                        tem1 = sr1.ReadLine(); 
+                        continue;
 
+                    }
+                    else if (temch[0] == 'S' && temch[1] == '0')
+                    {
+                        tem1 = sr1.ReadLine();
+                        continue;
+                    }
+                    else if (temch[0] == 'R' && temch[1] == 'Z')
+                    {
+                        tem1 = sr1.ReadLine();
+                        continue;
+                    }
+                    else if (temch[0] == 'C' && temch[1] == '0')
+                    {
+                        tem1 = sr1.ReadLine();
+                        continue;
+                    }
+
+                    else if (temch[0] == 'E' && temch[1] == '0')
+                    {
+                        tem1 = sr1.ReadLine();
+                        continue;
+
+                    }
+
+                        sw1.WriteLine(tem1);
+                        sw1.Flush();
+                    
                     tem1 = sr1.ReadLine();
                 }
+                sw1.Close(); 
+                sr1.Close();
             }
-            */
-            StreamReader sr = new StreamReader(@"../../data/departmentName.txt");
+            Console.WriteLine("kk");
+            StreamReader sr = new StreamReader(@"./data/departmentName.txt");
 
             string tem = sr.ReadLine();
 
@@ -121,7 +180,7 @@ namespace ncch
 
 
             fatchMenu();
-            fatchCourse("A9"); 
+            fatchCourse("F7"); 
 
         }
 
@@ -140,6 +199,7 @@ namespace ncch
             if (backgroundFatchMenu.IsBusy == false)
             {
                 backgroundFatchMenu.RunWorkerAsync();
+               
             }
         }
 
@@ -199,19 +259,22 @@ namespace ncch
                 string title = tmp.Substring(5, tmp.Length - 6);
                 string id = tmp.Substring(2, 2);
 
-                fout.WriteLine(id + "\t" + title);
+                fout.WriteLine(id + "  " + title);
             }
 
             fout.Flush(); fout.Close();
 
             Console.WriteLine(">done!");
+            isTemOutBusy = false;
         }
 
         private void fatchCourse(string depr)
         {
             if (backgroundFatchCourse.IsBusy == false)
             {
+                isTemOutBusy = true;
                 backgroundFatchCourse.RunWorkerAsync(depr);
+                isTemOutBusy = false;
             }
         }
 
