@@ -54,7 +54,7 @@ namespace ncch
       
                 while (isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
         
-                StreamReader sr1 = new StreamReader(@"tempOut.txt");
+                StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
                
                 StreamWriter sw1 = new StreamWriter(@"./data/departmentName.txt");
 
@@ -143,14 +143,16 @@ namespace ncch
                     classTable[i][j] = new Label();
                     classTable[i][j].Visible = true;
                     classTable[i][j].BackColor = Color.White;
+                    classTable[i][j].Anchor = AnchorStyles.None;
+
                     tableLayoutPanel1.Controls.Add(classTable[i][j], i, j);
-                    // classTable[i][j].Text=i.ToString()+","+j.ToString();      //  to test the label location
+                     classTable[i][j].Text=i.ToString()+","+j.ToString()+"\n\n\n";      //  to test the label location
                     classTable[i][j].AutoSize = true;
                 }
             }
 
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            for (int i = 1; i < 11; i++)
+           /* for (int i = 1; i < 11; i++)
             {
                 classTable[0][i].Text = "第 " + (i - 1).ToString() + " 節";
 
@@ -168,10 +170,14 @@ namespace ncch
             classTable[5][0].Text = "星期五";
             classTable[6][0].Text = "星期六";
             classTable[7][0].Text = "星期日";
+            */
+            tableLayoutPanel1.Controls.Remove(classTable[5][5]);
+            tableLayoutPanel1.SetColumnSpan(classTable[4][5], 2);
 
+            classTable[4][5].Text = "dddddddddddddddddddddd";
             initComboBox();
 
-
+           
 
         }
 
@@ -180,7 +186,7 @@ namespace ncch
 
 
             fatchMenu();
-            fatchCourse("F7"); 
+            fatchCourse("F9"); 
 
         }
 
@@ -246,9 +252,12 @@ namespace ncch
                 Console.WriteLine(">failed to match data");
                 return;
             }
-
-            StreamWriter fout = new StreamWriter("tempOut.txt");    //for debug
-
+            if (!Directory.Exists(@"./data"))
+            {
+                Directory.CreateDirectory(@"./data");
+            }
+            StreamWriter fout = new StreamWriter("./data/tempOut.txt");    //for debug
+            StreamWriter fidout = new StreamWriter(@"./data/courseId.txt");
             string tmp;
             foreach (Match cur in datas)
             {
@@ -260,8 +269,9 @@ namespace ncch
                 string id = tmp.Substring(2, 2);
 
                 fout.WriteLine(id + "  " + title);
+                fidout.WriteLine(id);
             }
-
+            fidout.Flush(); fidout.Close();
             fout.Flush(); fout.Close();
 
             Console.WriteLine(">done!");
@@ -315,7 +325,7 @@ namespace ncch
                     switch (++i)
                     {
                         case 3:
-                            id = (string)e.Argument + findHtmlTag.Replace(cur, "");
+                            id = (string)e.Argument +"_"+ findHtmlTag.Replace(cur, "");
                             break;
                         case 6:
                             cls = findHtmlTag.Replace(cur, ""); ;
@@ -351,7 +361,7 @@ namespace ncch
                             break;
                         case 23:
                             i = 0;
-                            fout.WriteLine(id + "\t" + cls + "\t" + grade + "\t" + type + "\t" + english + "\t" + name + "\t" + necessary + "\t" + point + "\t" + teacher + "\t" + time + "\t" + place + "\t" + other);
+                            fout.WriteLine("id="+id + "\tcls=" + cls + "\tgrade=" + grade + "\ttype=" + type + "\tenglish=" + english + "\tname=" + name + "\tnecessary=" + necessary + "\tpoint=" + point + "\tteacher=" + teacher + "\ttime=" + time + "\tplace=" + place + "\tother=" + other);
                             break;
                     }
                 }
