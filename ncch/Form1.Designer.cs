@@ -139,6 +139,7 @@
             this.input.TabIndex = 11;
             this.input.Text = "匯入必修";
             this.input.UseVisualStyleBackColor = true;
+
             // 
             // comboBoxShow
             // 

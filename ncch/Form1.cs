@@ -14,17 +14,24 @@ using System.Text.RegularExpressions;
 
 namespace ncch
 {
+
+
     public partial class Form1 : Form
     {
 
-        Label[][] classTable;
+        Label[][] courseTableLabel;
         bool isTemOutBusy;
+        bool isFatchCourseBusy;
+        bool isCourseIdBusy;
 
         public Form1()
         {
             isTemOutBusy = false;
-            Console.WriteLine("hh");
+            isCourseIdBusy = false;
+            isFatchCourseBusy = false;
+
             InitializeComponent();
+            initComboBox();
             initialGui();
         }
 
@@ -39,10 +46,7 @@ namespace ncch
             comboBoxClass.Items.Add("甲班");
             comboBoxClass.Items.Add("乙班");
             comboBoxClass.Items.Add("丙班");
-          
-          
-
-            
+                      
             if(!Directory.Exists(@"./data")){
                 Directory.CreateDirectory(@"./data");
             }
@@ -97,25 +101,21 @@ namespace ncch
                         continue;
 
                     }
-
-                        sw1.WriteLine(tem1);
-                        sw1.Flush();
-                    
-                    tem1 = sr1.ReadLine();
+                     sw1.WriteLine(tem1);
+                     sw1.Flush();
+                     tem1 = sr1.ReadLine();
                 }
                 sw1.Close(); 
                 sr1.Close();
             }
-            Console.WriteLine("kk");
-            StreamReader sr = new StreamReader(@"./data/departmentName.txt");
 
+            StreamReader sr = new StreamReader(@"./data/departmentName.txt");
             string tem = sr.ReadLine();
 
             while (tem != null)
             {
                 comboBoxDepartment.Items.Add(tem);
                 tem = sr.ReadLine();
-
             }
             sr.Close();
             comboBoxClass.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -125,29 +125,27 @@ namespace ncch
             comboBoxGrade.SelectedIndex = 0;
             comboBoxClass.SelectedIndex = 0;
 
-
-
         }
 
 
         private void initialGui()
         {
             //  initial the table of class
-            classTable = new Label[8][];
+            courseTableLabel = new Label[8][];
 
             for (int i = 0; i < 8; i++)
             {
-                classTable[i] = new Label[14];
+                courseTableLabel[i] = new Label[14];
                 for (int j = 0; j < 14; j++)
                 {
-                    classTable[i][j] = new Label();
-                    classTable[i][j].Visible = true;
-                    classTable[i][j].BackColor = Color.White;
-                    classTable[i][j].Anchor = AnchorStyles.None;
+                    courseTableLabel[i][j] = new Label();
+                    courseTableLabel[i][j].Visible = true;
+                    courseTableLabel[i][j].BackColor = Color.White;
+                    courseTableLabel[i][j].Anchor = AnchorStyles.None;
 
-                    tableLayoutPanel1.Controls.Add(classTable[i][j], i, j);
-                     classTable[i][j].Text=i.ToString()+","+j.ToString()+"\n\n\n";      //  to test the label location
-                    classTable[i][j].AutoSize = true;
+                    tableLayoutPanel1.Controls.Add(courseTableLabel[i][j], i, j);
+                    courseTableLabel[i][j].Text = i.ToString() + "," + j.ToString() + "\n\n\n";      //  to test the label location
+                    courseTableLabel[i][j].AutoSize = true;
                 }
             }
 
@@ -171,23 +169,39 @@ namespace ncch
             classTable[6][0].Text = "星期六";
             classTable[7][0].Text = "星期日";
             */
-            tableLayoutPanel1.Controls.Remove(classTable[5][5]);
-            tableLayoutPanel1.SetColumnSpan(classTable[4][5], 2);
-
-            classTable[4][5].Text = "dddddddddddddddddddddd";
-            initComboBox();
-
-           
-
+            //tableLayoutPanel1.Controls.Remove(courseTableLabel[5][5]);
+            //tableLayoutPanel1.SetColumnSpan(courseTableLabel[4][5], 2);
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
 
+          //  fatchMenu();
+           // fatchAllCourse();
+            fatchCourse("F7");
+        }
 
-            fatchMenu();
-            fatchCourse("F9"); 
-
+        private void fatchAllCourse()
+        {
+            while (isCourseIdBusy) { ;};
+            StreamReader sr = new StreamReader(@"./data/courseId.txt");
+            backgroundFatchCourse.WorkerSupportsCancellation = true; ;
+            string str = sr.ReadLine();
+            while (str != null)
+            {
+                while (isFatchCourseBusy) {;};
+                if (backgroundFatchCourse.IsBusy)
+                {
+                    backgroundFatchCourse.CancelAsync();
+                }
+                Console.WriteLine("ll");
+                while (backgroundFatchCourse.IsBusy) { ;};
+                Console.WriteLine("lll");
+                fatchCourse(str);
+                Console.WriteLine(str);
+                str = sr.ReadLine();
+            }
+            sr.Close();
         }
 
         private void comboBoxDepartment_SelectedIndexChanged(object sender, EventArgs e)
@@ -256,6 +270,8 @@ namespace ncch
             {
                 Directory.CreateDirectory(@"./data");
             }
+            while (isCourseIdBusy) { ;};
+            isCourseIdBusy = true;
             StreamWriter fout = new StreamWriter("./data/tempOut.txt");    //for debug
             StreamWriter fidout = new StreamWriter(@"./data/courseId.txt");
             string tmp;
@@ -276,20 +292,24 @@ namespace ncch
 
             Console.WriteLine(">done!");
             isTemOutBusy = false;
+            isCourseIdBusy = false;
         }
 
         private void fatchCourse(string depr)
         {
-            if (backgroundFatchCourse.IsBusy == false)
+           if(backgroundFatchCourse.IsBusy == false)
             {
-                isTemOutBusy = true;
+                isFatchCourseBusy = true;
+
                 backgroundFatchCourse.RunWorkerAsync(depr);
-                isTemOutBusy = false;
+              
+            
             }
         }
 
         private void backgroundFatchCourse_DoWork(object sender, DoWorkEventArgs e)
         {
+            isFatchCourseBusy = true;
             Regex findHtmlTag = new Regex(@"<.*?>", RegexOptions.Compiled);
             Regex findTD = new Regex(@"<TD.*?TD>", RegexOptions.Compiled);
 
@@ -302,7 +322,7 @@ namespace ncch
 
             string[] lines = Regex.Split(input, "\n");
 
-            StreamWriter fout = new StreamWriter("courseOut.txt");
+            StreamWriter fout = new StreamWriter(@"./data/courseOut"+e.Argument+".txt");
 
             int i = 0;
             string id = null,
@@ -368,6 +388,30 @@ namespace ncch
             }
             fout.Flush();
             fout.Close();
+            isFatchCourseBusy = false;
+            Console.WriteLine("fatchCourseFinish");
+
         }
+
+ 
+    }
+
+
+
+    public class courseData
+    {
+        public string id = null,
+                cls = null,
+                grade = null,
+                type = null,
+                english = null,
+                name = null,
+                necessary = null,
+                point = null,
+                teacher = null,
+                time = null,
+                place = null,
+                other = null;
+
     }
 }
