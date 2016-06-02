@@ -23,6 +23,7 @@ namespace ncch
         bool isTemOutBusy;
         bool isFatchCourseBusy;
         bool isCourseIdBusy;
+        courseData[][] courseTableData;
 
         public Form1()
         {
@@ -33,6 +34,20 @@ namespace ncch
             InitializeComponent();
             initComboBox();
             initialGui();
+            iniCourseDataTable();
+
+        }
+
+        private void iniCourseDataTable()
+        {
+            courseTableData=new courseData[8][];
+            for (int i = 0; i < 8; i++)
+            {
+                courseTableData[i] = new courseData[14];
+                for(int j=0;j<14;j++){
+                    courseTableData[i][j] = new courseData();
+                }
+            }
         }
 
 
@@ -135,13 +150,15 @@ namespace ncch
 
             for (int i = 0; i < 8; i++)
             {
-                courseTableLabel[i] = new Label[14];
-                for (int j = 0; j < 14; j++)
+                courseTableLabel[i] = new Label[15];
+                for (int j = 0; j < 15; j++)
                 {
                     courseTableLabel[i][j] = new Label();
                     courseTableLabel[i][j].Visible = true;
                     courseTableLabel[i][j].BackColor = Color.White;
                     courseTableLabel[i][j].Anchor = AnchorStyles.None;
+                    courseTableLabel[i][j].Dock = DockStyle.Fill;
+               
 
                     tableLayoutPanel1.Controls.Add(courseTableLabel[i][j], i, j);
                     courseTableLabel[i][j].Text = i.ToString() + "," + j.ToString() + "\n\n\n";      //  to test the label location
@@ -149,26 +166,33 @@ namespace ncch
                 }
             }
 
+      
             tableLayoutPanel1.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-           /* for (int i = 1; i < 11; i++)
+            for (int i = 1; i < 6; i++)
             {
-                classTable[0][i].Text = "第 " + (i - 1).ToString() + " 節";
+                courseTableLabel[0][i].Text = "第 " + (i - 1).ToString() + " 節";
 
             }
 
-            classTable[0][11].Text = "第A節";
-            classTable[0][12].Text = "第B節";
-            classTable[0][13].Text = "第C節";
+            courseTableLabel[0][6].Text = "第N節";
+            for (int i = 6; i < 11; i++)
+            {
+                courseTableLabel[0][i+1].Text = "第 " +(i-1).ToString() + " 節";
+
+            }
+            courseTableLabel[0][12].Text = "第A節";
+            courseTableLabel[0][13].Text = "第B節";
+            courseTableLabel[0][14].Text = "第C節";
 
 
-            classTable[1][0].Text = "星期一";
-            classTable[2][0].Text = "星期二";
-            classTable[3][0].Text = "星期三";
-            classTable[4][0].Text = "星期四";
-            classTable[5][0].Text = "星期五";
-            classTable[6][0].Text = "星期六";
-            classTable[7][0].Text = "星期日";
-            */
+            courseTableLabel[1][0].Text = "星期一";
+            courseTableLabel[2][0].Text = "星期二";
+            courseTableLabel[3][0].Text = "星期三";
+            courseTableLabel[4][0].Text = "星期四";
+            courseTableLabel[5][0].Text = "星期五";
+            courseTableLabel[6][0].Text = "星期六";
+            courseTableLabel[7][0].Text = "星期日";
+            
             //tableLayoutPanel1.Controls.Remove(courseTableLabel[5][5]);
             //tableLayoutPanel1.SetColumnSpan(courseTableLabel[4][5], 2);
         }
@@ -177,8 +201,8 @@ namespace ncch
         {
 
           //  fatchMenu();
-           // fatchAllCourse();
-            fatchCourse("F7");
+            //fatchAllCourse();
+           fatchCourse("F7");
         }
 
         private void fatchAllCourse()
@@ -189,11 +213,8 @@ namespace ncch
             string str = sr.ReadLine();
             while (str != null)
             {
-                while (isFatchCourseBusy) {;};
-                if (backgroundFatchCourse.IsBusy)
-                {
-                    backgroundFatchCourse.CancelAsync();
-                }
+                while (backgroundFatchCourse.IsBusy) {;};
+
                 Console.WriteLine("ll");
                 while (backgroundFatchCourse.IsBusy) { ;};
                 Console.WriteLine("lll");
@@ -299,11 +320,8 @@ namespace ncch
         {
            if(backgroundFatchCourse.IsBusy == false)
             {
-                isFatchCourseBusy = true;
-
                 backgroundFatchCourse.RunWorkerAsync(depr);
               
-            
             }
         }
 
@@ -393,13 +411,430 @@ namespace ncch
 
         }
 
- 
+        private void input_Click(object sender, EventArgs e)
+        {
+            courseData aa = new courseData();
+            aa.name = "aaaaaaaaaaaa";
+            aa.id = "A1_578";
+            aa.time = "[5] 7~8";
+            addCourseToTable(aa);
+            courseData bb = new courseData();
+            bb.id = "A1_547";
+            bb.time = "[5] 6~8";
+            addCourseToTable(bb);
+        }
+        private void addCourseToTable(courseData course)
+        {
+          char []timechar=course.time.ToCharArray();
+          int i = 0;
+          int weekday=0;
+          int starttime=-1;
+          int endtime=-1;
+          bool left = false;
+          bool slatch = false;
+
+          if (isconflict(course))
+          {
+              MessageBox.Show("衝堂");
+              return;
+          }
+          while (i < timechar.Length)
+          {
+              if (timechar[i] == '[')
+              {
+                  left = true;
+                  slatch=false;
+                  if (weekday != 0)
+                  {
+                      for (int j = starttime; j <= endtime; j++)
+                      {
+                          courseTableData[weekday][j] = course;
+
+                          if (j != starttime)
+                          {
+                              tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
+                          }
+                      }
+                      courseTableLabel[weekday][starttime + 1].Text = course.id + course.name;
+
+                      addLabelColar(courseTableLabel[weekday][starttime + 1]);
+                     
+                      tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
+                      
+                      
+                      
+                      weekday = 0;
+                      starttime = -1;
+                      endtime = -1;
+                      Console.WriteLine("haha");
+                  }
+              }
+              else if (timechar[i] == ']')
+              {
+                  left = false;
+              }
+              else if(timechar[i]=='~'){
+                  slatch=true;
+              }
+              else if (timechar[i] != '[' && timechar[i] != ']' && timechar[i] != 'N' && timechar[i] != 'A' && timechar[i] != 'B' && timechar[i] != 'C' && timechar[i] != '~' && (timechar[i] < '0' || timechar[i] >'9'))
+              {
+
+              }
+              else if (left)
+              {
+                  weekday = Int32.Parse(timechar[i].ToString()); 
+              }
+              else if (slatch)
+              {
+                  if (timechar[i] == 'A')
+                  {
+                      endtime = 11;
+                  }
+                  else if (timechar[i] == 'B')
+                  {
+                      endtime = 12;
+                  }
+                  else if (timechar[i] == 'C')
+                  {
+                      endtime = 13;
+                  }
+                  else if (timechar[i] == 'N')
+                  {
+                      endtime =5;
+                  }
+                  else
+                  {
+                      endtime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString()) + 1;
+                  }
+                  slatch = false;
+
+              }
+              else{
+                  if (timechar[i] == 'A')
+                  {
+                      starttime = 11;
+                  }
+                  else if (timechar[i] == 'B')
+                  {
+                      starttime = 12;
+                  }
+                  else if (timechar[i] == 'C')
+                  {
+                      starttime = 13;
+                  }
+                  else if (timechar[i] == 'N')
+                  {
+                      starttime = 5;
+                  }
+                  else
+                  {
+                      starttime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString())+1;
+                  }
+
+              }
+              
+              i++;
+          }
+          if (weekday != 0)
+          {
+              for (int j = starttime; j <= endtime; j++)
+              {
+                  courseTableData[weekday][j] = course;
+
+                  if (j != starttime)
+                  {
+                      tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
+                  }
+              }
+              courseTableLabel[weekday][starttime + 1].Text = course.id + course.name;
+              addLabelColar(courseTableLabel[weekday][starttime + 1]);
+            
+
+              tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
+
+          }
+           
+        }
+
+        void deleteCourseFromTable(courseData course) {
+            char[] timechar = course.time.ToCharArray();
+            int i = 0;
+            int weekday = 0;
+            int starttime = -1;
+            int endtime = -1;
+            bool left = false;
+            bool slatch = false;
+
+            while (i < timechar.Length)
+            {
+                if (timechar[i] == '[')
+                {
+                    left = true;
+                    slatch = false;
+                    if (weekday != 0)
+                    {
+                        tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], 1);
+                        
+                        for (int j = starttime; j <= endtime; j++)
+                        {
+                            courseTableData[weekday][j] = null ;
+
+                            if (j != starttime)
+                            {
+                                tableLayoutPanel1.Controls.Add(courseTableLabel[weekday][j + 1]);
+                            }
+                        }
+                        courseTableLabel[weekday][starttime + 1].Text = "\n("+weekday.ToString()+","+(starttime+1).ToString()+")\n";
+
+                        deleteLabelColar(courseTableLabel[weekday][starttime + 1]);
+
+                        tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1],1);
+
+
+
+                        weekday = 0;
+                        starttime = -1;
+                        endtime = -1;
+                        Console.WriteLine("haha");
+                    }
+                }
+                else if (timechar[i] == ']')
+                {
+                    left = false;
+                }
+                else if (timechar[i] == '~')
+                {
+                    slatch = true;
+                }
+                else if (timechar[i] != '[' && timechar[i] != ']' && timechar[i] != 'N' && timechar[i] != 'A' && timechar[i] != 'B' && timechar[i] != 'C' && timechar[i] != '~' && (timechar[i] < '0' || timechar[i] > '9'))
+                {
+
+                }
+                else if (left)
+                {
+                    weekday = Int32.Parse(timechar[i].ToString());
+                }
+                else if (slatch)
+                {
+                    if (timechar[i] == 'A')
+                    {
+                        endtime = 11;
+                    }
+                    else if (timechar[i] == 'B')
+                    {
+                        endtime = 12;
+                    }
+                    else if (timechar[i] == 'C')
+                    {
+                        endtime = 13;
+                    }
+                    else if (timechar[i] == 'N')
+                    {
+                        endtime = 5;
+                    }
+                    else
+                    {
+                        endtime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString()) + 1;
+                    }
+                    slatch = false;
+
+                }
+                else
+                {
+                    if (timechar[i] == 'A')
+                    {
+                        starttime = 11;
+                    }
+                    else if (timechar[i] == 'B')
+                    {
+                        starttime = 12;
+                    }
+                    else if (timechar[i] == 'C')
+                    {
+                        starttime = 13;
+                    }
+                    else if (timechar[i] == 'N')
+                    {
+                        starttime = 5;
+                    }
+                    else
+                    {
+                        starttime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString()) + 1;
+                    }
+
+                }
+
+                i++;
+            }
+            if (weekday != 0)
+            {
+                tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], 1);
+                
+                for (int j = starttime; j <= endtime; j++)
+                {
+                    courseTableData[weekday][j] = null;
+                    
+                    if (j != starttime)
+                    {
+                        tableLayoutPanel1.Controls.Add(courseTableLabel[weekday][j + 1]);
+                    }
+                }
+                courseTableLabel[weekday][starttime + 1].Text =   weekday.ToString() + "," + (starttime + 1).ToString() + "\n";
+
+                deleteLabelColar(courseTableLabel[weekday][starttime + 1]); 
+            }    
+        }
+
+        bool isconflict(courseData course)
+        {
+            char[] timechar = course.time.ToCharArray();
+            int i = 0;
+            int weekday = 0;
+            int starttime = -1;
+            int endtime = -1;
+            bool left = false;
+            bool slatch = false;
+
+            while (i < timechar.Length)
+            {
+                if (timechar[i] == '[')
+                {
+                    left = true;
+                    slatch = false;
+                    if (weekday != 0)
+                    {
+                        for (int j = starttime; j <= endtime; j++)
+                        {
+                            if (courseTableData[weekday][j] != null) return true; 
+                        }
+                        weekday = 0;
+                        starttime = -1;
+                        endtime = -1;
+                    }
+                }
+                else if (timechar[i] == ']')
+                {
+                    left = false;
+                }
+                else if (timechar[i] == '~')
+                {
+                    slatch = true;
+                }
+                else if (timechar[i] != '[' && timechar[i] != ']' && timechar[i] != 'N' && timechar[i] != 'A' && timechar[i] != 'B' && timechar[i] != 'C' && timechar[i] != '~' && (timechar[i] < '0' || timechar[i] > '9'))
+                {
+
+                }
+                else if (left)
+                {
+                    weekday = Int32.Parse(timechar[i].ToString());
+                }
+                else if (slatch)
+                {
+                    if (timechar[i] == 'A')
+                    {
+                        endtime = 11;
+                    }
+                    else if (timechar[i] == 'B')
+                    {
+                        endtime = 12;
+                    }
+                    else if (timechar[i] == 'C')
+                    {
+                        endtime = 13;
+                    }
+                    else if (timechar[i] == 'N')
+                    {
+                        endtime = 5;
+                    }
+                    else
+                    {
+                        endtime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString()) + 1;
+                    }
+                    slatch = false;
+
+                }
+                else
+                {
+                    if (timechar[i] == 'A')
+                    {
+                        starttime = 11;
+                    }
+                    else if (timechar[i] == 'B')
+                    {
+                        starttime = 12;
+                    }
+                    else if (timechar[i] == 'C')
+                    {
+                        starttime = 13;
+                    }
+                    else if (timechar[i] == 'N')
+                    {
+                        starttime = 5;
+                    }
+                    else
+                    {
+                        starttime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString()) + 1;
+                    }
+
+                }
+
+                i++;
+            }
+            if (weekday != 0)
+            {
+
+                for (int j = starttime; j <= endtime; j++)
+                {
+                    if (courseTableData[weekday][j] != null) return true; 
+                }
+            }
+            return false;
+        }
+
+        void addLabelColar(Label ll)
+        {
+            ll.BackColor = Color.Yellow;
+        }
+        void deleteLabelColar(Label ll)
+        {
+            ll.BackColor = Color.White;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            courseData aa = new courseData();
+            aa.name = "aaaaaaaaaaaa";
+            aa.id = "F7_000";
+            aa.time = "[5] 1~3";
+            deleteCourseFromTable(aa);
+        }
     }
 
 
 
     public class courseData
     {
+
+        public courseData() { }
+        
+        public courseData(courseData sample)
+        {
+            id = sample.id;
+            cls = sample.cls;
+            grade = sample.grade;
+            type = sample.type;
+            english = sample.english;
+            name = sample.name;
+            necessary = sample.necessary;
+            point = sample.point;
+            teacher = sample.teacher;
+            time = sample.time;
+            place = sample.place;
+            other = sample.other;
+            
+
+        }
+        
         public string id = null,
                 cls = null,
                 grade = null,
