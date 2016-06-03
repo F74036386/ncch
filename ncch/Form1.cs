@@ -24,6 +24,9 @@ namespace ncch
         bool isFatchCourseBusy;
         bool isCourseIdBusy;
         courseData[][] courseTableData;
+        Color generalEduColor;
+        Color necessaryColor;
+        Color chooseColay;
 
         public Form1()
         {
@@ -45,7 +48,7 @@ namespace ncch
             {
                 courseTableData[i] = new courseData[14];
                 for(int j=0;j<14;j++){
-                    courseTableData[i][j] = new courseData();
+                    courseTableData[i][j] = null;
                 }
             }
         }
@@ -192,6 +195,10 @@ namespace ncch
             courseTableLabel[5][0].Text = "星期五";
             courseTableLabel[6][0].Text = "星期六";
             courseTableLabel[7][0].Text = "星期日";
+
+            generalEduColor = Color.DarkOrange;
+            necessaryColor = Color.LightGray;
+            chooseColay = Color.MediumSeaGreen;
             
             //tableLayoutPanel1.Controls.Remove(courseTableLabel[5][5]);
             //tableLayoutPanel1.SetColumnSpan(courseTableLabel[4][5], 2);
@@ -814,9 +821,8 @@ namespace ncch
 
     public class courseData
     {
-
-        public courseData() { }
-        
+        public courseData() { }        
+       
         public courseData(courseData sample)
         {
             id = sample.id;
@@ -830,9 +836,7 @@ namespace ncch
             teacher = sample.teacher;
             time = sample.time;
             place = sample.place;
-            other = sample.other;
-            
-
+            other = sample.other;           
         }
         
         public string id = null,
@@ -847,6 +851,5 @@ namespace ncch
                 time = null,
                 place = null,
                 other = null;
-
     }
 }
