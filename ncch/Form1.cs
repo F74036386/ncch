@@ -26,7 +26,7 @@ namespace ncch
         courseData[][] courseTableData;
         Color generalEduColor;
         Color necessaryColor;
-        Color chooseColay;
+        Color chooseColar;
 
         public Form1()
         {
@@ -198,7 +198,7 @@ namespace ncch
 
             generalEduColor = Color.DarkOrange;
             necessaryColor = Color.LightGray;
-            chooseColay = Color.MediumSeaGreen;
+            chooseColar = Color.MediumSeaGreen;
             
             //tableLayoutPanel1.Controls.Remove(courseTableLabel[5][5]);
             //tableLayoutPanel1.SetColumnSpan(courseTableLabel[4][5], 2);
@@ -422,11 +422,13 @@ namespace ncch
         {
             courseData aa = new courseData();
             aa.name = "aaaaaaaaaaaa";
-            aa.id = "A1_578";
+            aa.courseId = "578";
+            aa.departmentId = "A1";
             aa.time = "[5] 7~8";
             addCourseToTable(aa);
             courseData bb = new courseData();
-            bb.id = "A1_547";
+            bb.courseId = "547";
+            bb.departmentId = "A1";
             bb.time = "[5] 6~8";
             addCourseToTable(bb);
         }
@@ -439,10 +441,14 @@ namespace ncch
           int endtime=-1;
           bool left = false;
           bool slatch = false;
-
+          if (alreadyChooseCourse(course))
+          {
+              MessageBox.Show("這堂課選過了喔");
+              return;
+          }
           if (isconflict(course))
           {
-              MessageBox.Show("衝堂");
+              MessageBox.Show("那個時間有其他的事喔");
               return;
           }
           while (i < timechar.Length)
@@ -462,9 +468,9 @@ namespace ncch
                               tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
                           }
                       }
-                      courseTableLabel[weekday][starttime + 1].Text = course.id + course.name;
+                      courseTableLabel[weekday][starttime + 1].Text = course.departmentId+course.courseId + course.name;
 
-                      addLabelColar(courseTableLabel[weekday][starttime + 1]);
+                      addLabelColar(courseTableLabel[weekday][starttime + 1],course);
                      
                       tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
                       
@@ -553,8 +559,8 @@ namespace ncch
                       tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
                   }
               }
-              courseTableLabel[weekday][starttime + 1].Text = course.id + course.name;
-              addLabelColar(courseTableLabel[weekday][starttime + 1]);
+              courseTableLabel[weekday][starttime + 1].Text = course.courseId+course.departmentId + course.name;
+              addLabelColar(courseTableLabel[weekday][starttime + 1],course);
             
 
               tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
@@ -571,6 +577,12 @@ namespace ncch
             int endtime = -1;
             bool left = false;
             bool slatch = false;
+
+            if (!alreadyChooseCourse(course)) 
+            {
+                MessageBox.Show("Has not chose the course"); 
+                return; 
+            }
 
             while (i < timechar.Length)
             {
@@ -798,9 +810,37 @@ namespace ncch
             return false;
         }
 
-        void addLabelColar(Label ll)
+        bool alreadyChooseCourse(courseData course)
         {
-            ll.BackColor = Color.Yellow;
+            for (int i = 0; i < 7; i++)
+            {
+                for (int j = 0; j < 14; j++)
+                {
+                    if (courseTableData[i][j]!=null&&courseTableData[i][j].Equals(course))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+                return false;
+        }
+
+        void addLabelColar(Label ll,courseData course)
+        {
+            if (course.departmentId == "A9")
+            {
+                ll.BackColor = generalEduColor;
+            }
+            else if (course.necessary == "Y")
+            {
+                ll.BackColor = necessaryColor;
+            }
+            else
+            {
+                ll.BackColor = chooseColar;
+
+            }
         }
         void deleteLabelColar(Label ll)
         {
@@ -811,8 +851,10 @@ namespace ncch
         {
             courseData aa = new courseData();
             aa.name = "aaaaaaaaaaaa";
-            aa.id = "F7_000";
+            aa.courseId = "000";
+            aa.departmentId = "F7";
             aa.time = "[5] 1~3";
+           
             deleteCourseFromTable(aa);
         }
     }
@@ -825,7 +867,8 @@ namespace ncch
        
         public courseData(courseData sample)
         {
-            id = sample.id;
+            courseId = sample.courseId;
+            departmentId = sample.departmentId;
             cls = sample.cls;
             grade = sample.grade;
             type = sample.type;
@@ -839,7 +882,8 @@ namespace ncch
             other = sample.other;           
         }
         
-        public string id = null,
+        public string courseId = null,
+                    departmentId=null,
                 cls = null,
                 grade = null,
                 type = null,
