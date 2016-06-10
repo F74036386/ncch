@@ -24,23 +24,82 @@ namespace ncch
         bool isFatchCourseBusy;
         bool isCourseIdBusy;
         courseData[][] courseTableData;
+        courseData[] courseChoosedList;
+        int amountOfCourseHasSelected;
         Color generalEduColor;
         Color necessaryColor;
         Color chooseColar;
+
 
         public Form1()
         {
             isTemOutBusy = false;
             isCourseIdBusy = false;
             isFatchCourseBusy = false;
+            
 
             InitializeComponent();
-            initComboBox();
+          
             initialGui();
             iniCourseDataTable();
-
+            iniCourseChooseList();
+            initComboBox();
+        }
+      
+        private void iniCourseChooseList()
+        {
+           courseChoosedList=new courseData[30];
+           amountOfCourseHasSelected = 0;
+           for (int i = 0; i < 30; i++)
+           {
+               courseChoosedList[i] = null;
+           }        
         }
 
+        private void addCourseToCourseChooseList(courseData course)
+        {
+            int k = -1;
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
+            {
+                if (Convert.ToInt16(courseChoosedList[i].point) > Convert.ToInt16(course.point)) {
+                    k = i;
+                    break;
+                }
+            }
+            if (k == -1)
+            {
+                courseChoosedList[amountOfCourseHasSelected] = course;
+            }
+            else
+            {
+                for (int j = amountOfCourseHasSelected; j > k;j-- )
+                {
+                    courseChoosedList[j] = courseChoosedList[j - 1];
+                }
+                courseChoosedList[k]=course;
+            }
+            amountOfCourseHasSelected++;
+
+
+        }
+      
+        private void deleteCourseFromCourseChooseList(courseData course)
+        {   int k=-1;
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
+            {
+                if(courseChoosedList[i].Equals(course)){
+                    courseChoosedList[i]=null;
+                    k=i;
+                }
+            }
+            if(k>=0){
+                for(int j=k;k<amountOfCourseHasSelected-1;j++){
+                    courseChoosedList[j]=courseChoosedList[j+1];
+                }
+                courseChoosedList[amountOfCourseHasSelected-1]=null;
+            }
+             amountOfCourseHasSelected--;
+        }
         private void iniCourseDataTable()
         {
             courseTableData=new courseData[8][];
@@ -232,16 +291,7 @@ namespace ncch
             sr.Close();
         }
 
-        private void comboBoxDepartment_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBoxGrade_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
+     
         private void fatchMenu()
         {
             if (backgroundFatchMenu.IsBusy == false)
@@ -432,8 +482,20 @@ namespace ncch
             bb.time = "[5] 6~8";
             addCourseToTable(bb);
         }
+      
         private void addCourseToTable(courseData course)
         {
+            if (alreadyChooseCourse(course))
+            {
+                MessageBox.Show("這堂課選過了喔");
+                return;
+            }
+            if (isconflict(course))
+            {
+                MessageBox.Show("那個時間有其他的事喔");
+                return;
+            }
+            
           char []timechar=course.time.ToCharArray();
           int i = 0;
           int weekday=0;
@@ -441,16 +503,9 @@ namespace ncch
           int endtime=-1;
           bool left = false;
           bool slatch = false;
-          if (alreadyChooseCourse(course))
-          {
-              MessageBox.Show("這堂課選過了喔");
-              return;
-          }
-          if (isconflict(course))
-          {
-              MessageBox.Show("那個時間有其他的事喔");
-              return;
-          }
+
+          addCourseToCourseChooseList(course);
+
           while (i < timechar.Length)
           {
               if (timechar[i] == '[')
@@ -570,6 +625,12 @@ namespace ncch
         }
 
         void deleteCourseFromTable(courseData course) {
+            if (!alreadyChooseCourse(course))
+            {
+                MessageBox.Show("這堂課沒選過喔!");
+                return;
+            }
+            
             char[] timechar = course.time.ToCharArray();
             int i = 0;
             int weekday = 0;
@@ -578,11 +639,7 @@ namespace ncch
             bool left = false;
             bool slatch = false;
 
-            if (!alreadyChooseCourse(course)) 
-            {
-                MessageBox.Show("Has not chose the course"); 
-                return; 
-            }
+            deleteCourseFromCourseChooseList(course);
 
             while (i < timechar.Length)
             {
@@ -601,6 +658,7 @@ namespace ncch
                             if (j != starttime)
                             {
                                 tableLayoutPanel1.Controls.Add(courseTableLabel[weekday][j + 1]);
+                                deleteLabelColar(courseTableLabel[weekday][j + 1]);
                             }
                         }
                         courseTableLabel[weekday][starttime + 1].Text = "\n("+weekday.ToString()+","+(starttime+1).ToString()+")\n";
@@ -842,6 +900,7 @@ namespace ncch
 
             }
         }
+       
         void deleteLabelColar(Label ll)
         {
             ll.BackColor = Color.White;
