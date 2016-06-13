@@ -315,19 +315,14 @@ namespace ncch
 
             //change encoding
             string input = Encoding.UTF8.GetString(html);
-
             string[] lines = Regex.Split(input, "\n");
 
             Console.WriteLine(">matching data...");
+
             MatchCollection datas = null;
             int idx;
-            for (idx = 0; idx < lines.Length; idx++)
-            {
-                if (Regex.IsMatch(lines[idx], "課程資訊請洽超連結網頁之相關人員!"))
-                {
-                    break;
-                }
-            }
+            for (idx = 0; idx < lines.Length; idx++)    //find location of course data
+                if (Regex.IsMatch(lines[idx], "課程資訊請洽超連結網頁之相關人員!")) break;
 
             for (; idx < lines.Length; idx++)
             {
@@ -344,17 +339,23 @@ namespace ncch
                 Console.WriteLine(">failed to match data");
                 return;
             }
+
             if (!Directory.Exists(@"./data"))
             {
                 Directory.CreateDirectory(@"./data");
             }
+
+
+            /****************what's this?*****************/
             while (isCourseIdBusy) { ;};
             isCourseIdBusy = true;
             StreamWriter fout = new StreamWriter("./data/tempOut.txt");    //for debug
             StreamWriter fidout = new StreamWriter(@"./data/courseId.txt");
+
             string tmp;
             foreach (Match cur in datas)
             {
+                //replace useless string data
                 tmp = findTitle.Match(cur.Value).Value;
                 tmp = findLSpaces.Replace(tmp, "(");
                 tmp = findRSpaces.Replace(tmp, ")");
@@ -943,16 +944,16 @@ namespace ncch
         
         public string courseId = null,
                     departmentId=null,
-                cls = null,
-                grade = null,
-                type = null,
-                english = null,
-                name = null,
-                necessary = null,
-                point = null,
-                teacher = null,
-                time = null,
-                place = null,
-                other = null;
+                    cls = null,
+                    grade = null,
+                    type = null,
+                    english = null,
+                    name = null,
+                    necessary = null,
+                    point = null,
+                    teacher = null,
+                    time = null,
+                    place = null,
+                    other = null;
     }
 }

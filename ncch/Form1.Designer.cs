@@ -46,14 +46,17 @@
             this.backgroundFatchCourse = new System.ComponentModel.BackgroundWorker();
             this.checkBoxKeepFromCoinsedance = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.dataSet1 = new System.Data.DataSet();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.Location = new System.Drawing.Point(877, 12);
+            this.buttonUpdate.Location = new System.Drawing.Point(1169, 15);
+            this.buttonUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonUpdate.Name = "buttonUpdate";
-            this.buttonUpdate.Size = new System.Drawing.Size(75, 23);
+            this.buttonUpdate.Size = new System.Drawing.Size(100, 29);
             this.buttonUpdate.TabIndex = 0;
             this.buttonUpdate.Text = "update";
             this.buttonUpdate.UseVisualStyleBackColor = true;
@@ -70,7 +73,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 41);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(16, 51);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 15;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -88,57 +92,63 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(415, 568);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(553, 710);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // comboBoxGrade
             // 
             this.comboBoxGrade.FormattingEnabled = true;
-            this.comboBoxGrade.Location = new System.Drawing.Point(626, 70);
+            this.comboBoxGrade.Location = new System.Drawing.Point(835, 88);
+            this.comboBoxGrade.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxGrade.Name = "comboBoxGrade";
-            this.comboBoxGrade.Size = new System.Drawing.Size(72, 20);
+            this.comboBoxGrade.Size = new System.Drawing.Size(95, 23);
             this.comboBoxGrade.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(505, 41);
+            this.label2.Location = new System.Drawing.Point(673, 51);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
+            this.label2.Size = new System.Drawing.Size(37, 15);
             this.label2.TabIndex = 7;
             this.label2.Text = "科系";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(635, 41);
+            this.label3.Location = new System.Drawing.Point(847, 51);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 12);
+            this.label3.Size = new System.Drawing.Size(37, 15);
             this.label3.TabIndex = 8;
             this.label3.Text = "年級";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(754, 41);
+            this.label1.Location = new System.Drawing.Point(1005, 51);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.Size = new System.Drawing.Size(37, 15);
             this.label1.TabIndex = 9;
             this.label1.Text = "班級";
             // 
             // comboBoxClass
             // 
             this.comboBoxClass.FormattingEnabled = true;
-            this.comboBoxClass.Location = new System.Drawing.Point(733, 70);
+            this.comboBoxClass.Location = new System.Drawing.Point(977, 88);
+            this.comboBoxClass.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxClass.Name = "comboBoxClass";
-            this.comboBoxClass.Size = new System.Drawing.Size(77, 20);
+            this.comboBoxClass.Size = new System.Drawing.Size(101, 23);
             this.comboBoxClass.TabIndex = 10;
             // 
             // input
             // 
-            this.input.Location = new System.Drawing.Point(877, 67);
+            this.input.Location = new System.Drawing.Point(1169, 84);
+            this.input.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.input.Name = "input";
-            this.input.Size = new System.Drawing.Size(75, 23);
+            this.input.Size = new System.Drawing.Size(100, 29);
             this.input.TabIndex = 11;
             this.input.Text = "匯入必修";
             this.input.UseVisualStyleBackColor = true;
@@ -147,50 +157,56 @@
             // comboBoxShow
             // 
             this.comboBoxShow.FormattingEnabled = true;
-            this.comboBoxShow.Location = new System.Drawing.Point(567, 127);
+            this.comboBoxShow.Location = new System.Drawing.Point(756, 159);
+            this.comboBoxShow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxShow.Name = "comboBoxShow";
-            this.comboBoxShow.Size = new System.Drawing.Size(164, 20);
+            this.comboBoxShow.Size = new System.Drawing.Size(217, 23);
             this.comboBoxShow.TabIndex = 12;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(490, 132);
+            this.label4.Location = new System.Drawing.Point(653, 165);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.Size = new System.Drawing.Size(67, 15);
             this.label4.TabIndex = 13;
             this.label4.Text = "查看系所";
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(188, 12);
+            this.label5.Location = new System.Drawing.Point(251, 15);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(33, 12);
+            this.label5.Size = new System.Drawing.Size(44, 15);
             this.label5.TabIndex = 0;
             this.label5.Text = "課表";
             // 
             // comboBoxDepartment
             // 
             this.comboBoxDepartment.FormattingEnabled = true;
-            this.comboBoxDepartment.Location = new System.Drawing.Point(461, 70);
+            this.comboBoxDepartment.Location = new System.Drawing.Point(615, 88);
+            this.comboBoxDepartment.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.comboBoxDepartment.Name = "comboBoxDepartment";
-            this.comboBoxDepartment.Size = new System.Drawing.Size(126, 20);
+            this.comboBoxDepartment.Size = new System.Drawing.Size(167, 23);
             this.comboBoxDepartment.TabIndex = 4;
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(450, 169);
+            this.dataGridView1.Location = new System.Drawing.Point(600, 211);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(502, 419);
+            this.dataGridView1.Size = new System.Drawing.Size(669, 524);
             this.dataGridView1.TabIndex = 14;
             // 
             // serch
             // 
-            this.serch.Location = new System.Drawing.Point(877, 125);
+            this.serch.Location = new System.Drawing.Point(1169, 156);
+            this.serch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.serch.Name = "serch";
-            this.serch.Size = new System.Drawing.Size(75, 23);
+            this.serch.Size = new System.Drawing.Size(100, 29);
             this.serch.TabIndex = 15;
             this.serch.Text = "查詢";
             this.serch.UseVisualStyleBackColor = true;
@@ -206,28 +222,34 @@
             // checkBoxKeepFromCoinsedance
             // 
             this.checkBoxKeepFromCoinsedance.AutoSize = true;
-            this.checkBoxKeepFromCoinsedance.Location = new System.Drawing.Point(756, 132);
+            this.checkBoxKeepFromCoinsedance.Location = new System.Drawing.Point(1008, 165);
+            this.checkBoxKeepFromCoinsedance.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkBoxKeepFromCoinsedance.Name = "checkBoxKeepFromCoinsedance";
-            this.checkBoxKeepFromCoinsedance.Size = new System.Drawing.Size(96, 16);
+            this.checkBoxKeepFromCoinsedance.Size = new System.Drawing.Size(119, 19);
             this.checkBoxKeepFromCoinsedance.TabIndex = 16;
             this.checkBoxKeepFromCoinsedance.Text = "避免撞課時間";
             this.checkBoxKeepFromCoinsedance.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(765, 7);
+            this.button1.Location = new System.Drawing.Point(1020, 9);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(106, 23);
+            this.button1.Size = new System.Drawing.Size(141, 29);
             this.button1.TabIndex = 17;
             this.button1.Text = "deletecourseTest";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // dataSet1
+            // 
+            this.dataSet1.DataSetName = "NewDataSet";
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 615);
+            this.ClientSize = new System.Drawing.Size(1301, 769);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.checkBoxKeepFromCoinsedance);
             this.Controls.Add(this.serch);
@@ -244,9 +266,11 @@
             this.Controls.Add(this.comboBoxDepartment);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.buttonUpdate);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "NCKU 選課小幫手";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -272,6 +296,7 @@
         private System.ComponentModel.BackgroundWorker backgroundFatchCourse;
         private System.Windows.Forms.CheckBox checkBoxKeepFromCoinsedance;
         private System.Windows.Forms.Button button1;
+        private System.Data.DataSet dataSet1;
     }
 }
 
