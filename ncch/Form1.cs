@@ -18,7 +18,7 @@ namespace ncch
 
     public partial class Form1 : Form
     {
-
+        /********************class menber varible*******************/
         Label[][] courseTableLabel;
         bool isTemOutBusy;
         bool isFatchCourseBusy;
@@ -26,10 +26,14 @@ namespace ncch
         courseData[][] courseTableData;
         courseData[] courseChoosedList;
         int amountOfCourseHasSelected;
+        ToolTip[][] toolTipTable;
+        ContextMenuStrip[][] contexMenuStripTable;
         Color generalEduColor;
         Color necessaryColor;
-        Color chooseColar;
+        Color chooseColor;
+        Color userDefineColor;
 
+        /****************************function******************/
 
         public Form1()
         {
@@ -37,13 +41,39 @@ namespace ncch
             isCourseIdBusy = false;
             isFatchCourseBusy = false;
             
-
             InitializeComponent();
-          
-            initialGui();
+            initialCourseTableLabel();
             iniCourseDataTable();
             iniCourseChooseList();
             initComboBox();
+            iniToolTipOfLabelForTable();
+            iniContextMenuStripTable();
+        }
+       
+        private void iniContextMenuStripTable()
+        {
+            contexMenuStripTable=new ContextMenuStrip[8][];
+            for(int i=0;i<8;i++){
+                contexMenuStripTable[i]=new ContextMenuStrip[14];
+                for (int j = 0; j < 14; j++)
+                {
+                    contexMenuStripTable[i][j] = null;
+                }
+
+            }
+        }
+
+        private void iniToolTipOfLabelForTable()
+        {
+            toolTipTable = new ToolTip[8][];
+            for (int i = 0; i < 8; i++)
+            {
+                toolTipTable[i] = new ToolTip[14];
+                for (int j = 0; j < 14; j++)
+                {
+                    toolTipTable[i][j] = null;
+                }
+            }
         }
       
         private void iniCourseChooseList()
@@ -79,8 +109,6 @@ namespace ncch
                 courseChoosedList[k]=course;
             }
             amountOfCourseHasSelected++;
-
-
         }
       
         private void deleteCourseFromCourseChooseList(courseData course)
@@ -100,6 +128,7 @@ namespace ncch
             }
              amountOfCourseHasSelected--;
         }
+
         private void iniCourseDataTable()
         {
             courseTableData=new courseData[8][];
@@ -111,7 +140,6 @@ namespace ncch
                 }
             }
         }
-
 
         private void initComboBox()
         {   
@@ -204,8 +232,7 @@ namespace ncch
 
         }
 
-
-        private void initialGui()
+        private void initialCourseTableLabel()
         {
             //  initial the table of class
             courseTableLabel = new Label[8][];
@@ -246,7 +273,6 @@ namespace ncch
             courseTableLabel[0][13].Text = "第B節";
             courseTableLabel[0][14].Text = "第C節";
 
-
             courseTableLabel[1][0].Text = "星期一";
             courseTableLabel[2][0].Text = "星期二";
             courseTableLabel[3][0].Text = "星期三";
@@ -257,10 +283,8 @@ namespace ncch
 
             generalEduColor = Color.DarkOrange;
             necessaryColor = Color.LightGray;
-            chooseColar = Color.MediumSeaGreen;
-            
-            //tableLayoutPanel1.Controls.Remove(courseTableLabel[5][5]);
-            //tableLayoutPanel1.SetColumnSpan(courseTableLabel[4][5], 2);
+            chooseColor = Color.MediumSeaGreen;
+            userDefineColor = Color.LightSalmon;
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -291,7 +315,6 @@ namespace ncch
             sr.Close();
         }
 
-     
         private void fatchMenu()
         {
             if (backgroundFatchMenu.IsBusy == false)
@@ -483,8 +506,30 @@ namespace ncch
             bb.time = "[5] 6~8";
             addCourseToTable(bb);
         }
-      
-        private void addCourseToTable(courseData course)
+
+        private string getTooltipString(courseData course)
+        {
+            string o="";
+            if(course.departmentId!=""){o+=("系所代碼: "+course.departmentId+"\n");}
+            if (course.courseId!= "") { o += ("課程代碼: " + course.courseId+"\n"); }
+            if (course.name != "") { o += ("課程名稱: " + course.name + "\n"); }
+            if (course.teacher != "") { o += ("上課老師: " + course.teacher+"\n"); }
+            if (course.point!= "") { o += ("學分數: " + course.point+"學分\n"); }
+            if (course.place != "") { o += ("上課地點: " + course.place+"\n"); }
+            if (course.other!= "") { o += ("備註: " + course.other+ "\n"); }
+            return o;
+        }
+
+        private ContextMenuStrip setContexMenuStripForLabel(ref Label label, courseData course)
+        {
+            ContextMenuStrip cm = new ContextMenuStrip();
+            label.ContextMenuStrip = cm;
+
+
+            return cm;
+        }
+
+        public void addCourseToTable(courseData course)
         {
             if (alreadyChooseCourse(course))
             {
@@ -525,17 +570,17 @@ namespace ncch
                           }
                       }
                       courseTableLabel[weekday][starttime + 1].Text = course.departmentId+course.courseId + course.name;
-
+                      toolTipTable[weekday][starttime] = new ToolTip();
+                      toolTipTable[weekday][starttime].SetToolTip(courseTableLabel[weekday][starttime + 1],getTooltipString(course));
+                      contexMenuStripTable[weekday][starttime] = setContexMenuStripForLabel(ref courseTableLabel[weekday][starttime + 1], courseTableData[weekday][starttime]);
                       addLabelColar(courseTableLabel[weekday][starttime + 1],course);
-                     
+                      
                       tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
-                      
-                      
-                      
+
                       weekday = 0;
                       starttime = -1;
                       endtime = -1;
-                      Console.WriteLine("haha");
+
                   }
               }
               else if (timechar[i] == ']')
@@ -601,9 +646,9 @@ namespace ncch
                   }
 
               }
-              
               i++;
           }
+
           if (weekday != 0)
           {
               for (int j = starttime; j <= endtime; j++)
@@ -616,16 +661,17 @@ namespace ncch
                   }
               }
               courseTableLabel[weekday][starttime + 1].Text = course.courseId+course.departmentId + course.name;
-              addLabelColar(courseTableLabel[weekday][starttime + 1],course);
-            
+              toolTipTable[weekday][starttime] = new ToolTip();
+              toolTipTable[weekday][starttime].SetToolTip(courseTableLabel[weekday][starttime + 1], getTooltipString(course));
 
+              addLabelColar(courseTableLabel[weekday][starttime + 1],course);
               tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
 
           }
-           
         }
 
-        void deleteCourseFromTable(courseData course) {
+        public void deleteCourseFromTable(courseData course)
+        {
             if (!alreadyChooseCourse(course))
             {
                 MessageBox.Show("這堂課沒選過喔!");
@@ -663,7 +709,7 @@ namespace ncch
                             }
                         }
                         courseTableLabel[weekday][starttime + 1].Text = "\n("+weekday.ToString()+","+(starttime+1).ToString()+")\n";
-
+                        toolTipTable[weekday][starttime] = null;
                         deleteLabelColar(courseTableLabel[weekday][starttime + 1]);
 
                         tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1],1);
@@ -758,7 +804,7 @@ namespace ncch
                     }
                 }
                 courseTableLabel[weekday][starttime + 1].Text =   weekday.ToString() + "," + (starttime + 1).ToString() + "\n";
-
+                toolTipTable[weekday][starttime] = null;
                 deleteLabelColar(courseTableLabel[weekday][starttime + 1]); 
             }    
         }
@@ -871,40 +917,78 @@ namespace ncch
 
         bool alreadyChooseCourse(courseData course)
         {
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
             {
-                for (int j = 0; j < 14; j++)
+                if (course.Equals(courseChoosedList[i]))
                 {
-                    if (courseTableData[i][j]!=null&&courseTableData[i][j].Equals(course))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
                 return false;
         }
 
-        void addLabelColar(Label ll,courseData course)
+        private void addLabelColar(Label ll, courseData course)
         {
             if (course.departmentId == "A9")
             {
                 ll.BackColor = generalEduColor;
             }
+            else if (course.departmentId == "userDefine")
+            {
+                ll.BackColor = userDefineColor;
+            }
             else if (course.necessary == "Y")
             {
                 ll.BackColor = necessaryColor;
             }
+           
             else
             {
-                ll.BackColor = chooseColar;
+                ll.BackColor = chooseColor;
 
             }
         }
-       
-        void deleteLabelColar(Label ll)
+
+        private void deleteLabelColar(Label ll)
         {
             ll.BackColor = Color.White;
+        }
+
+        private void setAllLabelColar()
+        {
+            for (int i = 1; i < 8; i++)
+            {
+                for (int j = 0; j < 14; j++)
+                {
+                    if (courseTableData[i][j] != null)
+                    {
+                        if (courseTableData[i][j].departmentId == "A9")
+                        {
+                            
+                            courseTableLabel[i][j+1].BackColor = generalEduColor;
+                        }
+                        else if (courseTableData[i][j].departmentId == "userDefine")
+                        {
+                            courseTableLabel[i][j + 1].BackColor = userDefineColor;
+                        }
+                        else if (courseTableData[i][j].necessary == "Y")
+                        {
+                            courseTableLabel[i][j + 1].BackColor = necessaryColor;
+                        }
+                        else
+                        {
+                            courseTableLabel[i][j + 1].BackColor = chooseColor;
+                        }
+                    }
+                    else
+                    {
+                        courseTableLabel[i][j + 1].BackColor = Color.White;
+                    }
+                }
+
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
