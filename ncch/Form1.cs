@@ -50,6 +50,11 @@ namespace ncch
             iniContextMenuStripTable();
         }
        
+       public courseData serchCourseById(string departId,string courseId){////     has not written
+          
+           return null;
+       }
+
         private void iniContextMenuStripTable()
         {
             contexMenuStripTable=new ContextMenuStrip[8][];
@@ -520,7 +525,7 @@ namespace ncch
             return o;
         }
 
-        private ContextMenuStrip setContexMenuStripForLabel(ref Label label, courseData course)
+        private ContextMenuStrip setContexMenuStripForLabel(ref Label label, courseData course)   //has not written
         {
             ContextMenuStrip cm = new ContextMenuStrip();
             label.ContextMenuStrip = cm;
