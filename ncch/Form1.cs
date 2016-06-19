@@ -65,7 +65,10 @@ namespace ncch
             int k = 0;
             for (int i = 0; i < amountOfCourseHasSelected; i++)
             {
-                k += Int32.Parse(courseChoosedList[i].point);
+               if(courseChoosedList[i].point!=null){
+                   k += Int32.Parse(courseChoosedList[i].point);
+            
+               }
             }
 
                 return k;
@@ -105,49 +108,6 @@ namespace ncch
            {
                courseChoosedList[i] = null;
            }        
-        }
-
-        private void addCourseToCourseChooseList(courseData course)
-        {
-            int k = -1;
-            for (int i = 0; i < amountOfCourseHasSelected; i++)
-            {
-                if (Convert.ToInt16(courseChoosedList[i].point) > Convert.ToInt16(course.point)) {
-                    k = i;
-                    break;
-                }
-            }
-            if (k == -1)
-            {
-                courseChoosedList[amountOfCourseHasSelected] = course;
-            }
-            else
-            {
-                for (int j = amountOfCourseHasSelected; j > k;j-- )
-                {
-                    courseChoosedList[j] = courseChoosedList[j - 1];
-                }
-                courseChoosedList[k]=course;
-            }
-            amountOfCourseHasSelected++;
-        }
-      
-        private void deleteCourseFromCourseChooseList(courseData course)
-        {   int k=-1;
-            for (int i = 0; i < amountOfCourseHasSelected; i++)
-            {
-                if(courseChoosedList[i].Equals(course)){
-                    courseChoosedList[i]=null;
-                    k=i;
-                }
-            }
-            if(k>=0){
-                for(int j=k;k<amountOfCourseHasSelected-1;j++){
-                    courseChoosedList[j]=courseChoosedList[j+1];
-                }
-                courseChoosedList[amountOfCourseHasSelected-1]=null;
-            }
-             amountOfCourseHasSelected--;
         }
 
         private void iniCourseDataTable()
@@ -306,6 +266,54 @@ namespace ncch
             necessaryColor = Color.LightGray;
             chooseColor = Color.MediumSeaGreen;
             userDefineColor = Color.LightSalmon;
+        }
+
+        private void addCourseToCourseChooseList(courseData course)
+        {
+            int k = -1;
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
+            {
+                if (Convert.ToInt16(courseChoosedList[i].point) > Convert.ToInt16(course.point))
+                {
+                    k = i;
+                    break;
+                }
+            }
+            if (k == -1)
+            {
+                courseChoosedList[amountOfCourseHasSelected] = course;
+            }
+            else
+            {
+                for (int j = amountOfCourseHasSelected; j > k; j--)
+                {
+                    courseChoosedList[j] = courseChoosedList[j - 1];
+                }
+                courseChoosedList[k] = course;
+            }
+            amountOfCourseHasSelected++;
+        }
+
+        private void deleteCourseFromCourseChooseList(courseData course)
+        {
+            int k = -1;
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
+            {
+                if (courseChoosedList[i].Equals(course))
+                {
+                    courseChoosedList[i] = null;
+                    k = i;
+                }
+            }
+            if (k >= 0)
+            {
+                for (int j = k; k < amountOfCourseHasSelected - 1; j++)
+                {
+                    courseChoosedList[j] = courseChoosedList[j + 1];
+                }
+                courseChoosedList[amountOfCourseHasSelected - 1] = null;
+            }
+            amountOfCourseHasSelected--;
         }
 
         private void buttonUpdate_Click(object sender, EventArgs e)
@@ -520,6 +528,7 @@ namespace ncch
             aa.courseId = "578";
             aa.departmentId = "A1";
             aa.time = "[5] 7~8";
+            aa.point = "3";
             addCourseToTable(aa);
             courseData bb = new courseData();
             bb.courseId = "547";
@@ -1021,6 +1030,36 @@ namespace ncch
             aa.time = "[5] 1~3";
            
             deleteCourseFromTable(aa);
+        }
+
+        private void 依序號加選ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idAddCourse ii = new idAddCourse(this);
+            ii.Show();
+        }
+
+        private void 依序號退選ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idDeleteCourseForm ii = new idDeleteCourseForm(this);
+            ii.Show();
+        }
+
+        private void 匯入必修ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            inputNessarryForm ii = new inputNessarryForm(this);
+            ii.Show();
+        }
+
+        private void 查看已選課程ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            hasSeletedForm ii = new hasSeletedForm(this);
+            ii.Show();
+        }
+
+        private void 課表設定ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tableSettingForm ii = new tableSettingForm(this);
+            ii.Show();
         }
     }
 

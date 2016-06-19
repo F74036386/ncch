@@ -17,7 +17,7 @@ namespace ncch
         {
             InitializeComponent();
         }
-        public idAddCourse(ref Form1 form1)
+        public idAddCourse( Form1 form1)
         {
             mainForm = form1;
             InitializeComponent();

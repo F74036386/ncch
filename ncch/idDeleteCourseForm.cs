@@ -17,7 +17,7 @@ namespace ncch
         {
             InitializeComponent();
         }
-        public idDeleteCourseForm(ref Form1 form)
+        public idDeleteCourseForm( Form1 form)
 
         {
             mainform = form;

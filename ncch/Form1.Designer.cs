@@ -273,24 +273,28 @@
             this.依序號加選ToolStripMenuItem.Name = "依序號加選ToolStripMenuItem";
             this.依序號加選ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.依序號加選ToolStripMenuItem.Text = "依序號加選";
+            this.依序號加選ToolStripMenuItem.Click += new System.EventHandler(this.依序號加選ToolStripMenuItem_Click);
             // 
             // 依序號退選ToolStripMenuItem
             // 
             this.依序號退選ToolStripMenuItem.Name = "依序號退選ToolStripMenuItem";
             this.依序號退選ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.依序號退選ToolStripMenuItem.Text = "依序號退選";
+            this.依序號退選ToolStripMenuItem.Click += new System.EventHandler(this.依序號退選ToolStripMenuItem_Click);
             // 
             // 匯入必修ToolStripMenuItem
             // 
             this.匯入必修ToolStripMenuItem.Name = "匯入必修ToolStripMenuItem";
             this.匯入必修ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.匯入必修ToolStripMenuItem.Text = "匯入必修";
+            this.匯入必修ToolStripMenuItem.Click += new System.EventHandler(this.匯入必修ToolStripMenuItem_Click);
             // 
             // 查看已選課程ToolStripMenuItem
             // 
             this.查看已選課程ToolStripMenuItem.Name = "查看已選課程ToolStripMenuItem";
             this.查看已選課程ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.查看已選課程ToolStripMenuItem.Text = "查看已選課程";
+            this.查看已選課程ToolStripMenuItem.Click += new System.EventHandler(this.查看已選課程ToolStripMenuItem_Click);
             // 
             // 設定ToolStripMenuItem
             // 
@@ -305,6 +309,7 @@
             this.課表設定ToolStripMenuItem.Name = "課表設定ToolStripMenuItem";
             this.課表設定ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.課表設定ToolStripMenuItem.Text = "課表設定";
+            this.課表設定ToolStripMenuItem.Click += new System.EventHandler(this.課表設定ToolStripMenuItem_Click);
             // 
             // Form1
             // 
