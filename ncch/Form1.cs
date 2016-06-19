@@ -15,23 +15,22 @@ using System.Text.RegularExpressions;
 namespace ncch
 {
 
-
     public partial class Form1 : Form
     {
         /********************class menber varible*******************/
-        Label[][] courseTableLabel;
-        bool isTemOutBusy;
-        bool isFatchCourseBusy;
-        bool isCourseIdBusy;
-        courseData[][] courseTableData;
-        courseData[] courseChoosedList;
-        int amountOfCourseHasSelected;
-        ToolTip[][] toolTipTable;
-        ContextMenuStrip[][] contexMenuStripTable;
-        Color generalEduColor;
-        Color necessaryColor;
-        Color chooseColor;
-        Color userDefineColor;
+        private Label[][] courseTableLabel;
+        private bool isTemOutBusy;
+        private bool isFatchCourseBusy;
+        private bool isCourseIdBusy;
+        public courseData[][] courseTableData;
+        public courseData[] courseChoosedList;
+        public int amountOfCourseHasSelected;
+        private ToolTip[][] toolTipTable;
+        private ContextMenuStrip[][] contexMenuStripTable;
+        public Color generalEduColor;
+        public Color necessaryColor;
+        public Color chooseColor;
+        public Color userDefineColor;
 
         /****************************function******************/
 
@@ -49,11 +48,28 @@ namespace ncch
             iniToolTipOfLabelForTable();
             iniContextMenuStripTable();
         }
-       
-       public courseData serchCourseById(string departId,string courseId){////     has not written
-          
+
+        public courseData serchCourseById(string departId, string courseId)////     has not written
+        {
+              
            return null;
-       }
+        }
+
+        public void inputNessarry(string department,string grade,string cla)////    has not written
+        {
+            return;
+        }
+
+        public int allPointOfAlreadySlectedCourse()
+        {
+            int k = 0;
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
+            {
+                k += Int32.Parse(courseChoosedList[i].point);
+            }
+
+                return k;
+        }
 
         private void iniContextMenuStripTable()
         {
@@ -67,7 +83,7 @@ namespace ncch
 
             }
         }
-
+        
         private void iniToolTipOfLabelForTable()
         {
             toolTipTable = new ToolTip[8][];
@@ -534,16 +550,16 @@ namespace ncch
             return cm;
         }
 
-        public void addCourseToTable(courseData course)
+        public void addCourseToTable(courseData course)    //  to add course ;
         {
             if (alreadyChooseCourse(course))
             {
-                MessageBox.Show("這堂課選過了喔");
+                MessageBox.Show(course.departmentId+course.courseId+"  "+course.name+" \n這堂課選過了喔");
                 return;
             }
             if (isconflict(course))
             {
-                MessageBox.Show("那個時間有其他的事喔");
+                MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n 這堂課的時間沒空喔");
                 return;
             }
             
@@ -626,7 +642,6 @@ namespace ncch
                       endtime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString()) + 1;
                   }
                   slatch = false;
-
               }
               else{
                   if (timechar[i] == 'A')
@@ -649,7 +664,6 @@ namespace ncch
                   {
                       starttime = (Int32.Parse(timechar[i].ToString()) < 5) ? Int32.Parse(timechar[i].ToString()) : Int32.Parse(timechar[i].ToString())+1;
                   }
-
               }
               i++;
           }
@@ -673,13 +687,14 @@ namespace ncch
               tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
 
           }
-        }
+          MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n加選成功");
+        }       
 
-        public void deleteCourseFromTable(courseData course)
+        public void deleteCourseFromTable(courseData course)      //to delete course
         {
             if (!alreadyChooseCourse(course))
             {
-                MessageBox.Show("這堂課沒選過喔!");
+                MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n這堂課沒選過喔!");
                 return;
             }
             
@@ -811,10 +826,11 @@ namespace ncch
                 courseTableLabel[weekday][starttime + 1].Text =   weekday.ToString() + "," + (starttime + 1).ToString() + "\n";
                 toolTipTable[weekday][starttime] = null;
                 deleteLabelColar(courseTableLabel[weekday][starttime + 1]); 
-            }    
+            }
+            MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n退選成功");
         }
 
-        bool isconflict(courseData course)
+        bool isconflict(courseData course)                  //to check the course time is conflict or not
         {
             char[] timechar = course.time.ToCharArray();
             int i = 0;
@@ -960,7 +976,7 @@ namespace ncch
             ll.BackColor = Color.White;
         }
 
-        private void setAllLabelColar()
+        public void setAllLabelColar()
         {
             for (int i = 1; i < 8; i++)
             {
@@ -1012,6 +1028,20 @@ namespace ncch
 
     public class courseData
     {
+        public string courseId = null,
+                     departmentId = null,
+                     cls = null,
+                     grade = null,
+                     type = null,
+                     english = null,
+                     name = null,
+                     necessary = null,
+                     point = null,
+                     teacher = null,
+                     time = null,
+                     place = null,
+                     other = null;
+       
         public courseData() { }        
        
         public courseData(courseData sample)
@@ -1030,19 +1060,5 @@ namespace ncch
             place = sample.place;
             other = sample.other;           
         }
-        
-        public string courseId = null,
-                    departmentId=null,
-                    cls = null,
-                    grade = null,
-                    type = null,
-                    english = null,
-                    name = null,
-                    necessary = null,
-                    point = null,
-                    teacher = null,
-                    time = null,
-                    place = null,
-                    other = null;
     }
 }

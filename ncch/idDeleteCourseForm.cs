@@ -25,7 +25,19 @@ namespace ncch
         }
         private void button1_Click(object sender, EventArgs e)
         {
-
+            string dId = "";
+            string cId = "";
+            if (textBox1.Text != "") dId = textBox1.Text;
+            if (textBox2.Text != "") dId = textBox2.Text;
+            courseData co = mainform.serchCourseById(dId,cId);
+            if (co == null)
+            {
+                MessageBox.Show("代碼錯誤");
+            }
+            else
+            {
+                mainform.addCourseToTable(co);
+            }
         }
     }
 }

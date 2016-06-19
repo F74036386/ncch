@@ -50,12 +50,12 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.檔案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.加退選ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.依序號加選ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.依序號退選ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.匯入必修ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.查看已選課程ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.課表設定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.課程資料更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -263,18 +263,10 @@
             this.依序號加選ToolStripMenuItem,
             this.依序號退選ToolStripMenuItem,
             this.匯入必修ToolStripMenuItem,
-            this.課程資料更新ToolStripMenuItem});
+            this.查看已選課程ToolStripMenuItem});
             this.加退選ToolStripMenuItem.Name = "加退選ToolStripMenuItem";
             this.加退選ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.加退選ToolStripMenuItem.Text = "課程";
-            // 
-            // 設定ToolStripMenuItem
-            // 
-            this.設定ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.課表設定ToolStripMenuItem});
-            this.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
-            this.設定ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
-            this.設定ToolStripMenuItem.Text = "設定";
             // 
             // 依序號加選ToolStripMenuItem
             // 
@@ -294,17 +286,25 @@
             this.匯入必修ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.匯入必修ToolStripMenuItem.Text = "匯入必修";
             // 
+            // 查看已選課程ToolStripMenuItem
+            // 
+            this.查看已選課程ToolStripMenuItem.Name = "查看已選課程ToolStripMenuItem";
+            this.查看已選課程ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.查看已選課程ToolStripMenuItem.Text = "查看已選課程";
+            // 
+            // 設定ToolStripMenuItem
+            // 
+            this.設定ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.課表設定ToolStripMenuItem});
+            this.設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
+            this.設定ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.設定ToolStripMenuItem.Text = "設定";
+            // 
             // 課表設定ToolStripMenuItem
             // 
             this.課表設定ToolStripMenuItem.Name = "課表設定ToolStripMenuItem";
             this.課表設定ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.課表設定ToolStripMenuItem.Text = "課表設定";
-            // 
-            // 課程資料更新ToolStripMenuItem
-            // 
-            this.課程資料更新ToolStripMenuItem.Name = "課程資料更新ToolStripMenuItem";
-            this.課程資料更新ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.課程資料更新ToolStripMenuItem.Text = "課程資料更新";
             // 
             // Form1
             // 
@@ -367,9 +367,9 @@
         private System.Windows.Forms.ToolStripMenuItem 依序號加選ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 依序號退選ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 匯入必修ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 課程資料更新ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 設定ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 課表設定ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 查看已選課程ToolStripMenuItem;
     }
 }
 

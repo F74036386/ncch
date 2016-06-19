@@ -70,6 +70,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="hasSeletedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="hasSeletedForm.Designer.cs">
+      <DependentUpon>hasSeletedForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="idAddCourse.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,16 +88,34 @@
     <Compile Include="idDeleteCourseForm.Designer.cs">
       <DependentUpon>idDeleteCourseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="inputNessarryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="inputNessarryForm.Designer.cs">
+      <DependentUpon>inputNessarryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tableSettingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tableSettingForm.Designer.cs">
+      <DependentUpon>tableSettingForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="hasSeletedForm.resx">
+      <DependentUpon>hasSeletedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="idAddCourse.resx">
       <DependentUpon>idAddCourse.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="idDeleteCourseForm.resx">
       <DependentUpon>idDeleteCourseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="inputNessarryForm.resx">
+      <DependentUpon>inputNessarryForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -102,6 +126,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="tableSettingForm.resx">
+      <DependentUpon>tableSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="courseDBDataSet.xsc">
       <DependentUpon>courseDBDataSet.xsd</DependentUpon>
     </None>

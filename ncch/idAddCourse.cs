@@ -32,11 +32,10 @@ namespace ncch
             if (cour != null)
             {
                 mainForm.addCourseToTable(cour);
-                MessageBox.Show("成功加選");
             }
             else
             {
-                MessagwBox.Show("找不到該課程");
+                MessageBox.Show("代碼錯誤");
             }
         }
     }
