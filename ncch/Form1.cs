@@ -19,7 +19,7 @@ namespace ncch
     {
         /********************class menber varible*******************/
         private Label[][] courseTableLabel;
-        private bool isTemOutBusy;
+        public bool isTemOutBusy;
         private bool isFatchCourseBusy;
         private bool isCourseIdBusy;
         public courseData[][] courseTableData;
@@ -32,31 +32,35 @@ namespace ncch
         public Color chooseColor;
         public Color userDefineColor;
 
+
         /****************************function******************/
 
-        public Form1()
+        public Form1()                   //  to initial 
         {
             isTemOutBusy = false;
             isCourseIdBusy = false;
             isFatchCourseBusy = false;
-            
             InitializeComponent();
             initialCourseTableLabel();
             iniCourseDataTable();
             iniCourseChooseList();
-            initComboBox();
             iniToolTipOfLabelForTable();
             iniContextMenuStripTable();
+            iniDataGrid();
+            
         }
 
         public courseData serchCourseById(string departId, string courseId)////     has not written
         {
-              
+            //   give id and return courseData   
+            //if cannot find return null  
            return null;
         }
 
-        public void inputNessarry(string department,string grade,string cla)////    has not written
+        public void inputNessarry(string department,string grade,string cls)////    has not written
         {
+           //use function addCourseToTable(courseData course)   to add course;
+            
             return;
         }
 
@@ -86,7 +90,25 @@ namespace ncch
 
             }
         }
-        
+
+        private void iniDataGrid()
+        {
+            dataGridView1.ColumnCount = 13;
+            dataGridView1.Columns[0].Name = "系所代號";
+            dataGridView1.Columns[1].Name = "課程代號";
+            dataGridView1.Columns[2].Name = "課程名稱";
+            dataGridView1.Columns[3].Name = "課程年級";
+            dataGridView1.Columns[4].Name = "授課教師";
+            dataGridView1.Columns[5].Name = "上課時間";
+            dataGridView1.Columns[6].Name = "上課地點";
+            dataGridView1.Columns[7].Name = "英授";
+            dataGridView1.Columns[8].Name = "必選修";
+            dataGridView1.Columns[9].Name = "班級";
+            dataGridView1.Columns[10].Name = "學分數";
+            dataGridView1.Columns[11].Name = "課程類別";
+            dataGridView1.Columns[12].Name = "備註";
+        }
+
         private void iniToolTipOfLabelForTable()
         {
             toolTipTable = new ToolTip[8][];
@@ -120,97 +142,6 @@ namespace ncch
                     courseTableData[i][j] = null;
                 }
             }
-        }
-
-        private void initComboBox()
-        {   
-            comboBoxGrade.Items.Add("1");
-            comboBoxGrade.Items.Add("2");
-            comboBoxGrade.Items.Add("3");
-            comboBoxGrade.Items.Add("4");
-
-            comboBoxClass.Items.Add("甲班");
-            comboBoxClass.Items.Add("乙班");
-            comboBoxClass.Items.Add("丙班");
-                      
-            if(!Directory.Exists(@"./data")){
-                Directory.CreateDirectory(@"./data");
-            }
-            if(File.Exists(@"./dataGridView1/departmentName.txt"))
-            {
-                isTemOutBusy = true;
- 
-                fatchMenu();
-      
-                while (isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
-        
-                StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
-               
-                StreamWriter sw1 = new StreamWriter(@"./data/departmentName.txt");
-
-                string tem1 = sr1.ReadLine();
-                
-                while (tem1 != null)
-                {
-                    char[] temch = tem1.ToCharArray();
-
-                    if (temch[0] == 'A')
-                    {
-                        tem1 = sr1.ReadLine(); 
-                        continue;
-                    }
-                    else if (temch[0] == 'Z' && temch[1] == '0')
-                    {
-                        tem1 = sr1.ReadLine(); 
-                        continue;
-
-                    }
-                    else if (temch[0] == 'S' && temch[1] == '0')
-                    {
-                        tem1 = sr1.ReadLine();
-                        continue;
-                    }
-                    else if (temch[0] == 'R' && temch[1] == 'Z')
-                    {
-                        tem1 = sr1.ReadLine();
-                        continue;
-                    }
-                    else if (temch[0] == 'C' && temch[1] == '0')
-                    {
-                        tem1 = sr1.ReadLine();
-                        continue;
-                    }
-
-                    else if (temch[0] == 'E' && temch[1] == '0')
-                    {
-                        tem1 = sr1.ReadLine();
-                        continue;
-
-                    }
-                     sw1.WriteLine(tem1);
-                     sw1.Flush();
-                     tem1 = sr1.ReadLine();
-                }
-                sw1.Close(); 
-                sr1.Close();
-            }
-
-            StreamReader sr = new StreamReader(@"./data/departmentName.txt");
-            string tem = sr.ReadLine();
-
-            while (tem != null)
-            {
-                comboBoxDepartment.Items.Add(tem);
-                tem = sr.ReadLine();
-            }
-            sr.Close();
-            comboBoxClass.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxDepartment.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxGrade.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBoxDepartment.SelectedIndex = 0;
-            comboBoxGrade.SelectedIndex = 0;
-            comboBoxClass.SelectedIndex = 0;
-
         }
 
         private void initialCourseTableLabel()
@@ -344,7 +275,7 @@ namespace ncch
             sr.Close();
         }
 
-        private void fatchMenu()
+        public void fatchMenu()
         {
             if (backgroundFatchMenu.IsBusy == false)
             {
@@ -426,7 +357,7 @@ namespace ncch
             isCourseIdBusy = false;
         }
 
-        private void fatchCourse(string depr)
+        public void fatchCourse(string depr)
         {
            if(backgroundFatchCourse.IsBusy == false)
             {
@@ -1061,8 +992,13 @@ namespace ncch
             tableSettingForm ii = new tableSettingForm(this);
             ii.Show();
         }
-    }
 
+        private void 課程更新ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            updateForm ii = new updateForm(this);
+            ii.Show();
+        }
+    }
 
 
     public class courseData

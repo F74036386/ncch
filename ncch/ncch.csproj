@@ -102,6 +102,12 @@
     <Compile Include="tableSettingForm.Designer.cs">
       <DependentUpon>tableSettingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="updateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="updateForm.Designer.cs">
+      <DependentUpon>updateForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -128,6 +134,9 @@
     </Compile>
     <EmbeddedResource Include="tableSettingForm.resx">
       <DependentUpon>tableSettingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="updateForm.resx">
+      <DependentUpon>updateForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="courseDBDataSet.xsc">
       <DependentUpon>courseDBDataSet.xsd</DependentUpon>
