@@ -38,6 +38,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.檔案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.課程更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.儲存課表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.匯入課表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.課表重設ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.加退選ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.依序號加選ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.依序號退選ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,9 +51,6 @@
             this.checkBoxKeepFromCoinsedance = new System.Windows.Forms.CheckBox();
             this.comboBoxShow = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.儲存課表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.匯入課表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.課表重設ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
             this.menuStrip1.SuspendLayout();
@@ -157,6 +157,27 @@
             this.課程更新ToolStripMenuItem.Text = "課程更新";
             this.課程更新ToolStripMenuItem.Click += new System.EventHandler(this.課程更新ToolStripMenuItem_Click);
             // 
+            // 儲存課表ToolStripMenuItem
+            // 
+            this.儲存課表ToolStripMenuItem.Name = "儲存課表ToolStripMenuItem";
+            this.儲存課表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.儲存課表ToolStripMenuItem.Text = "儲存課表";
+            this.儲存課表ToolStripMenuItem.Click += new System.EventHandler(this.儲存課表ToolStripMenuItem_Click);
+            // 
+            // 匯入課表ToolStripMenuItem
+            // 
+            this.匯入課表ToolStripMenuItem.Name = "匯入課表ToolStripMenuItem";
+            this.匯入課表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.匯入課表ToolStripMenuItem.Text = "匯入課表";
+            this.匯入課表ToolStripMenuItem.Click += new System.EventHandler(this.匯入課表ToolStripMenuItem_Click);
+            // 
+            // 課表重設ToolStripMenuItem
+            // 
+            this.課表重設ToolStripMenuItem.Name = "課表重設ToolStripMenuItem";
+            this.課表重設ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.課表重設ToolStripMenuItem.Text = "課表重設";
+            this.課表重設ToolStripMenuItem.Click += new System.EventHandler(this.課表重設ToolStripMenuItem_Click);
+            // 
             // 加退選ToolStripMenuItem
             // 
             this.加退選ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -237,24 +258,6 @@
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 13;
             this.label4.Text = "查看系所";
-            // 
-            // 儲存課表ToolStripMenuItem
-            // 
-            this.儲存課表ToolStripMenuItem.Name = "儲存課表ToolStripMenuItem";
-            this.儲存課表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.儲存課表ToolStripMenuItem.Text = "儲存課表";
-            // 
-            // 匯入課表ToolStripMenuItem
-            // 
-            this.匯入課表ToolStripMenuItem.Name = "匯入課表ToolStripMenuItem";
-            this.匯入課表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.匯入課表ToolStripMenuItem.Text = "匯入課表";
-            // 
-            // 課表重設ToolStripMenuItem
-            // 
-            this.課表重設ToolStripMenuItem.Name = "課表重設ToolStripMenuItem";
-            this.課表重設ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.課表重設ToolStripMenuItem.Text = "課表重設";
             // 
             // Form1
             // 

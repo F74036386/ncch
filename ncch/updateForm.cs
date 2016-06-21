@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace ncch
 {
@@ -23,16 +24,40 @@ namespace ncch
         {
             InitializeComponent();
             mainform = mform;
+            iniComboBox();
         }
 
         private void iniComboBox()       //  have not written
         {
-
+                comboBox1.Items.Add("目錄");
+                while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
+                mainform.isTemOutBusy = true;
+                StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
+                
+                string tem1 = sr1.ReadLine();
+                Console.WriteLine("tem"+tem1);
+                while (tem1 != null)
+                {
+                    comboBox1.Items.Add(tem1);
+                    tem1 = sr1.ReadLine();
+                }
+                sr1.Close();
+                mainform.isTemOutBusy = false;
+                comboBox1.SelectedIndex = 0;
+                comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            if (comboBox1.Text == "目錄")
+            {
+                mainform.fatchMenu();
+            }
+            else
+            {
+                string de = comboBox1.Text.ToCharArray()[0].ToString() + comboBox1.Text.ToCharArray()[1].ToString();
+                mainform.fatchCourse(de);
+            }
         }
     }
 }

@@ -39,14 +39,14 @@ namespace ncch
             {
                 Directory.CreateDirectory(@"./data");
             }
-            if (File.Exists(@"./dataGridView1/departmentName.txt"))
+            if (!File.Exists(@"./data/departmentName.txt"))
             {
-               mainform. isTemOutBusy = true;
+               //mainform. isTemOutBusy = true;
 
-               mainform.fatchMenu();
+               //mainform.fatchMenu();
 
                while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
-
+               mainform.isTemOutBusy = true;
                 StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
 
                 StreamWriter sw1 = new StreamWriter(@"./data/departmentName.txt");
@@ -96,8 +96,9 @@ namespace ncch
                 }
                 sw1.Close();
                 sr1.Close();
+                mainform.isTemOutBusy = false;
             }
-
+          
             StreamReader sr = new StreamReader(@"./data/departmentName.txt");
             string tem = sr.ReadLine();
 
@@ -113,6 +114,7 @@ namespace ncch
             comboBoxDepartment.SelectedIndex = 0;
             comboBoxGrade.SelectedIndex = 0;
             comboBoxClass.SelectedIndex = 0;
+
 
         }
         

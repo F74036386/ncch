@@ -47,7 +47,6 @@ namespace ncch
             iniToolTipOfLabelForTable();
             iniContextMenuStripTable();
             iniDataGrid();
-            
         }
 
         public courseData serchCourseById(string departId, string courseId)////     has not written
@@ -62,6 +61,65 @@ namespace ncch
            //use function addCourseToTable(courseData course)   to add course;
             
             return;
+        }
+
+        public void serchForDataGrid(string department, bool checkConflic)////      has not written
+        {
+            /////use  addCourseToDataGridView(courseData c) to add course
+            /////use  isconflict(courseData c)       to check isconflic
+
+        }
+
+        private void addCourseToDataGridView(courseData c)
+        {
+            string[] row = new string[13];
+            row[0] = c.departmentId;
+            row[1] = c.courseId;
+            row[2] = c.name;
+            row[3] = c.grade;
+            row[4] = c.teacher;
+            row[5] = c.time;
+            row[6] = c.place;
+            row[7] = c.english;
+            row[8] = c.necessary;
+            row[9] = c.cls;
+            row[10] = c.point;
+            row[11] = c.type;
+            row[12] = c.other;
+            dataGridView1.Rows.Add(row);
+        }
+
+        public courseData serchCourseByIdByLin(string departId, string courseId)////     just for debug
+        {
+            StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
+            string alldata = sr.ReadToEnd();
+            sr.Close();
+            if (alldata == null) return null;
+            Console.WriteLine("did" + departId);
+            Console.WriteLine("cId" + courseId);
+            string[] lines = Regex.Split(alldata, "\n");
+            foreach (string cur in lines)
+            {
+                if (cur != null)
+                {
+                    string[] kk = Regex.Split(cur, "\t");
+                    Regex findCId = new Regex(@"courseId=.*?", RegexOptions.Compiled);
+                    foreach (string gg in kk)
+                    {
+                        if (findCId.IsMatch(gg))
+                        {
+                            string ww = findCId.Replace(gg, "");
+                            if (ww == courseId)
+                            {
+                                courseData co = dataStringToCourseData(cur);
+                                return co;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         public int allPointOfAlreadySlectedCourse()
@@ -107,6 +165,22 @@ namespace ncch
             dataGridView1.Columns[10].Name = "學分數";
             dataGridView1.Columns[11].Name = "課程類別";
             dataGridView1.Columns[12].Name = "備註";
+
+            while (isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
+            isTemOutBusy = true;
+            StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
+
+            string tem1 = sr1.ReadLine();
+            Console.WriteLine("tem" + tem1);
+            while (tem1 != null)
+            {
+                comboBoxShow.Items.Add(tem1);
+                tem1 = sr1.ReadLine();
+            }
+            sr1.Close();
+            isTemOutBusy = false;
+            comboBoxShow.SelectedIndex = 0;
+            comboBoxShow.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         private void iniToolTipOfLabelForTable()
@@ -162,7 +236,8 @@ namespace ncch
                
 
                     tableLayoutPanel1.Controls.Add(courseTableLabel[i][j], i, j);
-                    courseTableLabel[i][j].Text = i.ToString() + "," + j.ToString() + "\n\n\n";      //  to test the label location
+                  //  courseTableLabel[i][j].Text = i.ToString() + "," + j.ToString() + "\n\n\n";      //  to test the label location
+                    courseTableLabel[i][j].Text = "\n\n";
                     courseTableLabel[i][j].AutoSize = true;
                 }
             }
@@ -238,21 +313,13 @@ namespace ncch
             }
             if (k >= 0)
             {
-                for (int j = k; k < amountOfCourseHasSelected - 1; j++)
+                for (int j = k; j < (amountOfCourseHasSelected - 1); j++)
                 {
                     courseChoosedList[j] = courseChoosedList[j + 1];
                 }
                 courseChoosedList[amountOfCourseHasSelected - 1] = null;
             }
             amountOfCourseHasSelected--;
-        }
-
-        private void buttonUpdate_Click(object sender, EventArgs e)
-        {
-
-          //  fatchMenu();
-            //fatchAllCourse();
-           fatchCourse("F7");
         }
 
         private void fatchAllCourse()
@@ -404,7 +471,7 @@ namespace ncch
                     switch (++i)
                     {
                         case 3:
-                            id = (string)e.Argument +"_"+ findHtmlTag.Replace(cur, "");
+                            id = findHtmlTag.Replace(cur, "");
                             break;
                         case 6:
                             cls = findHtmlTag.Replace(cur, ""); ;
@@ -440,7 +507,7 @@ namespace ncch
                             break;
                         case 23:
                             i = 0;
-                            fout.WriteLine("id="+id + "\tcls=" + cls + "\tgrade=" + grade + "\ttype=" + type + "\tenglish=" + english + "\tname=" + name + "\tnecessary=" + necessary + "\tpoint=" + point + "\tteacher=" + teacher + "\ttime=" + time + "\tplace=" + place + "\tother=" + other);
+                            fout.WriteLine("departmentId="+(string)e.Argument +"\tcourseId="+id + "\tcls=" + cls + "\tgrade=" + grade + "\ttype=" + type + "\tenglish=" + english + "\tname=" + name + "\tnecessary=" + necessary + "\tpoint=" + point + "\tteacher=" + teacher + "\ttime=" + time + "\tplace=" + place + "\tother=" + other);
                             break;
                     }
                 }
@@ -450,22 +517,6 @@ namespace ncch
             isFatchCourseBusy = false;
             Console.WriteLine("fatchCourseFinish");
 
-        }
-
-        private void input_Click(object sender, EventArgs e)
-        {
-            courseData aa = new courseData();
-            aa.name = "aaaaaaaaaaaa";
-            aa.courseId = "578";
-            aa.departmentId = "A1";
-            aa.time = "[5] 7~8";
-            aa.point = "3";
-            addCourseToTable(aa);
-            courseData bb = new courseData();
-            bb.courseId = "547";
-            bb.departmentId = "A1";
-            bb.time = "[5] 6~8";
-            addCourseToTable(bb);
         }
 
         private string getTooltipString(courseData course)
@@ -530,7 +581,7 @@ namespace ncch
                               tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
                           }
                       }
-                      courseTableLabel[weekday][starttime + 1].Text = course.departmentId+course.courseId + course.name;
+                      courseTableLabel[weekday][starttime + 1].Text = course.departmentId+" "+course.courseId +"\n"+ course.name;
                       toolTipTable[weekday][starttime] = new ToolTip();
                       toolTipTable[weekday][starttime].SetToolTip(courseTableLabel[weekday][starttime + 1],getTooltipString(course));
                       contexMenuStripTable[weekday][starttime] = setContexMenuStripForLabel(ref courseTableLabel[weekday][starttime + 1], courseTableData[weekday][starttime]);
@@ -619,7 +670,7 @@ namespace ncch
                       tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
                   }
               }
-              courseTableLabel[weekday][starttime + 1].Text = course.courseId+course.departmentId + course.name;
+              courseTableLabel[weekday][starttime + 1].Text = course.departmentId + " " + course.courseId + "\n" + course.name;
               toolTipTable[weekday][starttime] = new ToolTip();
               toolTipTable[weekday][starttime].SetToolTip(courseTableLabel[weekday][starttime + 1], getTooltipString(course));
 
@@ -668,7 +719,8 @@ namespace ncch
                                 deleteLabelColar(courseTableLabel[weekday][j + 1]);
                             }
                         }
-                        courseTableLabel[weekday][starttime + 1].Text = "\n("+weekday.ToString()+","+(starttime+1).ToString()+")\n";
+                      //  courseTableLabel[weekday][starttime + 1].Text = "\n("+weekday.ToString()+","+(starttime+1).ToString()+")\n";
+                        courseTableLabel[weekday][starttime + 1].Text = "\n\n";
                         toolTipTable[weekday][starttime] = null;
                         deleteLabelColar(courseTableLabel[weekday][starttime + 1]);
 
@@ -763,7 +815,8 @@ namespace ncch
                         tableLayoutPanel1.Controls.Add(courseTableLabel[weekday][j + 1]);
                     }
                 }
-                courseTableLabel[weekday][starttime + 1].Text =   weekday.ToString() + "," + (starttime + 1).ToString() + "\n";
+              //  courseTableLabel[weekday][starttime + 1].Text =   weekday.ToString() + "," + (starttime + 1).ToString() + "\n";
+                courseTableLabel[weekday][starttime + 1].Text = "\n\n";
                 toolTipTable[weekday][starttime] = null;
                 deleteLabelColar(courseTableLabel[weekday][starttime + 1]); 
             }
@@ -772,6 +825,7 @@ namespace ncch
 
         bool isconflict(courseData course)                  //to check the course time is conflict or not
         {
+            if (course == null) return false;
             char[] timechar = course.time.ToCharArray();
             int i = 0;
             int weekday = 0;
@@ -885,7 +939,6 @@ namespace ncch
                     return true;
                 }
             }
-
                 return false;
         }
 
@@ -899,7 +952,7 @@ namespace ncch
             {
                 ll.BackColor = userDefineColor;
             }
-            else if (course.necessary == "Y")
+            else if (course.necessary == "必修")
             {
                 ll.BackColor = necessaryColor;
             }
@@ -933,7 +986,7 @@ namespace ncch
                         {
                             courseTableLabel[i][j + 1].BackColor = userDefineColor;
                         }
-                        else if (courseTableData[i][j].necessary == "Y")
+                        else if (courseTableData[i][j].necessary == "必修")
                         {
                             courseTableLabel[i][j + 1].BackColor = necessaryColor;
                         }
@@ -952,15 +1005,139 @@ namespace ncch
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private string makeSaveString(courseData course)
         {
-            courseData aa = new courseData();
-            aa.name = "aaaaaaaaaaaa";
-            aa.courseId = "000";
-            aa.departmentId = "F7";
-            aa.time = "[5] 1~3";
+            string ss = "departmentId=" + course.departmentId + "\tcoueseId=" + course.courseId + "\tcls=" + course.cls + "\tgrade=" + course.grade + "\ttype=" + course.type + "\tenglish=" + course.english + "\tname=" + course.name + "\tnecessary=" + course.necessary + "\tpoint=" + course.point + "\tteacher=" + course.teacher + "\ttime=" + course.time + "\tplace=" + course.place + "\tother=" + course.other;
+            return ss;
+        }
+
+        private void saveChosedCourse()
+        {
+            if (!Directory.Exists(@"./data")) Directory.CreateDirectory(@"./data");
+            StreamWriter sw = new StreamWriter(@"./data/choosingCouseSave.txt");
+            for (int i = 0; i < amountOfCourseHasSelected; i++)
+            {
+                sw.WriteLine(makeSaveString(courseChoosedList[i]));
+            }
+            sw.Close();
+            MessageBox.Show("課表儲存完成");
+        }
+
+        private void restartCourseTable()
+        {
+            while (courseChoosedList[0] != null)
+            {
+                deleteCourseFromTable(courseChoosedList[0]);                
+            }
+            MessageBox.Show("課表重設完成");
+        }
+
+        private void insertChosedCourseFromSave()
+        {    
+            if (!Directory.Exists(@"./data")) Directory.CreateDirectory(@"./data");
+            if (File.Exists(@"./data/choosingCouseSave.txt"))
+            {
+                StreamReader sr = new StreamReader(@"./data/choosingCouseSave.txt");
+                string temp = sr.ReadLine();
+                while (temp != null)
+                {
+                    courseData co = dataStringToCourseData(temp);
+                    if (co != null)
+                    {
+                        addCourseToTable(co);
+                    }
+                    temp = sr.ReadLine();
+                }
+                sr.Close();
+                MessageBox.Show("匯入課表完成");
+            }
+            else
+            {
+                MessageBox.Show("沒有已儲存的課表");
+            }
+        }
+
+        private courseData dataStringToCourseData(string s)
+        {
+            courseData co = new courseData();
+            if (s == null) return null;
+            Console.WriteLine(s);
+            string[] lines= Regex.Split(s, "\t");
            
-            deleteCourseFromTable(aa);
+            Regex findDId = new Regex(@"departmentId=.*?", RegexOptions.Compiled);
+            Regex findCId = new Regex(@"courseId=.*?", RegexOptions.Compiled);
+            Regex findCls = new Regex(@"cls=.*?", RegexOptions.Compiled);
+            Regex findGrade = new Regex(@"grade=.*?", RegexOptions.Compiled);
+            Regex findType = new Regex(@"type=.*?", RegexOptions.Compiled);
+            Regex findEnglish = new Regex(@"english=.*?", RegexOptions.Compiled);
+            Regex findName = new Regex(@"name=.*?", RegexOptions.Compiled);
+            Regex findNecessary = new Regex(@"necessary=.*?", RegexOptions.Compiled);
+            Regex findPoint = new Regex(@"point=.*?", RegexOptions.Compiled);
+            Regex findTeacher = new Regex(@"teacher=.*?", RegexOptions.Compiled);
+            Regex findTime = new Regex(@"time=.*?", RegexOptions.Compiled);
+            Regex findPlace = new Regex(@"place=.*?", RegexOptions.Compiled);
+            Regex findOther = new Regex(@"other=.*?", RegexOptions.Compiled);
+
+            foreach (string cur in lines)
+            {   
+                if (findDId.IsMatch(cur))
+                {
+                    co.departmentId = findDId.Replace(cur, "");
+                }
+                if (findCId.IsMatch(cur))
+                {
+                    co.courseId = findCId.Replace(cur, "");
+                }
+                if (findCls.IsMatch(cur))
+                {
+                    co.cls = findCls.Replace(cur, "");
+                }
+                if (findGrade.IsMatch(cur))
+                {
+                    co.grade = findGrade.Replace(cur, "");
+                }
+                if (findType.IsMatch(cur))
+                {
+                    co.type = findType.Replace(cur, "");
+                }
+                if (findEnglish.IsMatch(cur))
+                {
+                    co.english = findEnglish.Replace(cur, "");
+                }
+                if (findName.IsMatch(cur))
+                {
+                    co.name = findName.Replace(cur, "");
+                }
+                if (findNecessary.IsMatch(cur))
+                {
+                    co.necessary = findNecessary.Replace(cur, "");
+                }
+                if (findPoint.IsMatch(cur))
+                {
+                    co.point = findPoint.Replace(cur, "");
+                }
+                if (findTeacher.IsMatch(cur))
+                {
+                    co.teacher = findTeacher.Replace(cur, "");
+                }
+                if (findTime.IsMatch(cur))
+                {
+                    co.time = findTime.Replace(cur, "");
+                }
+                if (findPlace.IsMatch(cur))
+                {
+                    co.place = findPlace.Replace(cur, "");
+                }
+                if (findOther.IsMatch(cur))
+                {
+                    co.other = findOther.Replace(cur, "");
+                }
+
+            }
+
+            Console.WriteLine("a"+co.departmentId);
+            if (co.departmentId == null) return null;
+            return co;
         }
 
         private void 依序號加選ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -997,6 +1174,21 @@ namespace ncch
         {
             updateForm ii = new updateForm(this);
             ii.Show();
+        }
+
+        private void 儲存課表ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveChosedCourse();
+        }
+
+        private void 匯入課表ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            insertChosedCourseFromSave();
+        }
+
+        private void 課表重設ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            restartCourseTable();
         }
     }
 

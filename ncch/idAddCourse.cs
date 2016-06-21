@@ -27,7 +27,7 @@ namespace ncch
             string dId="";
             string cId="";
             if (textBox1.Text != "") dId = textBox1.Text;
-            if (textBox2.Text != "") dId = textBox2.Text;
+            if (textBox2.Text != "") cId = textBox2.Text;
             courseData cour = mainForm.serchCourseById(dId, cId);
             if (cour != null)
             {
