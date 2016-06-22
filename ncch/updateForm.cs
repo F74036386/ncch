@@ -30,6 +30,7 @@ namespace ncch
         private void iniComboBox()       //  have not written
         {
                 comboBox1.Items.Add("目錄");
+                if (!File.Exists(@"./data/tempOut.txt")) mainform.fetchMenuByFile();
                 while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
                 mainform.isTemOutBusy = true;
                 StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");

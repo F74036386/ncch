@@ -30,6 +30,7 @@ namespace ncch
             comboBoxGrade.Enabled = false;
             comboBoxClass.Enabled = false;
             comboBoxDepartment.Enabled = true;
+            comboBoxDepartment.Text = "請先選系所";
 
             if (!Directory.Exists(@"./data"))
             {
@@ -40,7 +41,7 @@ namespace ncch
                 //mainform. isTemOutBusy = true;
 
                 //mainform.fatchMenu();
-
+                if (!File.Exists(@"./data/tempOut.txt")) mainform.fetchMenuByFile();
                 while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
                 mainform.isTemOutBusy = true;
                 StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
@@ -93,6 +94,8 @@ namespace ncch
                 sw1.Close();
                 sr1.Close();
                 mainform.isTemOutBusy = false;
+                comboBoxDepartment.TextChanged += new EventHandler(slectDepart);
+                comboBoxGrade.TextChanged += new EventHandler(slectGrade);
             }
 
             StreamReader sr = new StreamReader(@"./data/departmentName.txt");
@@ -108,33 +111,49 @@ namespace ncch
             comboBoxDepartment.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxGrade.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxDepartment.SelectedIndex = 0;
-
-
-
-
         }
 
-        private void slectDepart(object sender, EventArgs e){
-            comboBoxGrade.Enabled=true;
-            comboBoxGrade.SelectedIndex = 0;
-            string depart = comboBoxDepartment.Text.ToCharArray()[0].ToString()+comboBoxDepartment.Text.ToCharArray()[1].ToString();
+        private void slectDepart(object sender, EventArgs e)
+        {
+            if (comboBoxDepartment.SelectedIndex == 0) return;
+            comboBoxGrade.Enabled = true;
+            comboBoxGrade.Items.Clear();
+            comboBoxGrade.Items.Add("請選年級");
+            string depart = comboBoxDepartment.Text.ToCharArray()[0].ToString() + comboBoxDepartment.Text.ToCharArray()[1].ToString();
+
             int num = mainform.howManyGradeInTheDepart(depart);
             for (int i = 1; i <= num; i++)
             {
                 comboBoxGrade.Items.Add(i.ToString());
             }
+            comboBoxGrade.SelectedIndex = 0;
         }
 
-         private void slectGrade(object sender, EventArgs e){
-             comboBoxClass .Enabled= true;
-             comboBoxClass.SelectedIndex = 0;
-             string depart = comboBoxDepartment.Text.ToCharArray()[0].ToString() + comboBoxDepartment.Text.ToCharArray()[1].ToString();
-             int grade = Int32.Parse(comboBoxGrade.Text);
-             int num = mainform.howManyClassInTheDepart(depart,grade);
-             if (num == 1) {
-                // comboBoxClass.Items.Add
-
-             }
+        private void slectGrade(object sender, EventArgs e)
+        {
+            if (comboBoxGrade.SelectedIndex == 0) return;
+            comboBoxClass.Items.Clear();
+            comboBoxClass.Enabled = true;
+            comboBoxClass.Items.Add("請選班級");
+            string depart = comboBoxDepartment.Text.ToCharArray()[0].ToString() + comboBoxDepartment.Text.ToCharArray()[1].ToString();
+            int grade = Int32.Parse(comboBoxGrade.Text);
+            int num = mainform.howManyClassInTheDepart(depart, grade);
+            if (num == 1)
+            {
+                comboBoxClass.Items.Add("只有一班");
+            }
+            if (num == 2)
+            {
+                comboBoxClass.Items.Add("甲班");
+                comboBoxClass.Items.Add("乙班");
+            }
+            if (num == 3)
+            {
+                comboBoxClass.Items.Add("甲班");
+                comboBoxClass.Items.Add("乙班");
+                comboBoxClass.Items.Add("丙班");
+            }
+            comboBoxClass.SelectedIndex = 0;
         }
 
         private void initComboBox()
@@ -161,7 +180,7 @@ namespace ncch
                //mainform. isTemOutBusy = true;
 
                //mainform.fatchMenu();
-
+                if (!File.Exists(@"./data/tempOut.txt")) mainform.fetchMenuByFile();
                while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
                mainform.isTemOutBusy = true;
                 StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");

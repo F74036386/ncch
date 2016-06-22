@@ -35,6 +35,7 @@
             this.comboBoxDepartment = new System.Windows.Forms.ComboBox();
             this.comboBoxGrade = new System.Windows.Forms.ComboBox();
             this.comboBoxClass = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -98,11 +99,21 @@
             this.comboBoxClass.Size = new System.Drawing.Size(121, 20);
             this.comboBoxClass.TabIndex = 6;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(340, 114);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(137, 12);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "如果只有一班就選甲班喔";
+            // 
             // inputNessarryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(523, 217);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.comboBoxClass);
             this.Controls.Add(this.comboBoxGrade);
             this.Controls.Add(this.comboBoxDepartment);
@@ -126,5 +137,6 @@
         private System.Windows.Forms.ComboBox comboBoxDepartment;
         private System.Windows.Forms.ComboBox comboBoxGrade;
         private System.Windows.Forms.ComboBox comboBoxClass;
+        private System.Windows.Forms.Label label4;
     }
 }
