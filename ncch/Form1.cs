@@ -59,10 +59,47 @@ namespace ncch
            return null;
         }
 
-        public void inputNessarry(string department,string grade,string cls)////    has not written
+        public void inputNessarry(string departId,string grade,string cls)////    has not written
         {
            //use function addCourseToTable(courseData course)   to add course;
             
+            return;
+        }
+
+        public void inputNessarryByLin(string departId, string grade, string cls)////    has not written
+        {
+            //use function addCourseToTable(courseData course)   to add course;
+            if (!File.Exists(@"./data/courseOut" + departId + ".txt"))
+            {
+                MessageBox.Show("沒有該系所的課程資料，請先更新");
+                return;
+            }
+            StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
+            string alldata = sr.ReadToEnd();
+            sr.Close();
+            if (alldata == null) return;
+            Console.WriteLine("did" + departId);
+            string[] lines = Regex.Split(alldata, "\n");
+            foreach (string cur in lines)
+            {
+                if (cur != null)
+                {
+                    courseData co = dataStringToCourseData(cur);
+                    if(co==null)continue;
+                    if (co.necessary == "必修")
+                    {
+                        if (co.grade == grade)
+                        {   
+                            if (co.cls == null || co.cls == cls)
+                            {
+                                if (co.courseId == "") continue;
+                                addCourseToTable(co);
+                            }
+                        }
+                    }
+                }
+            }
+
             return;
         }
 
@@ -368,7 +405,7 @@ namespace ncch
             int k = -1;
             for (int i = 0; i < amountOfCourseHasSelected; i++)
             {
-                if (courseChoosedList[i].Equals(course))
+                if ((course.departmentId == courseChoosedList[i].departmentId) && (course.courseId == courseChoosedList[i].courseId))
                 {
                     courseChoosedList[i] = null;
                     k = i;

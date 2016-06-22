@@ -144,14 +144,14 @@ namespace ncch
             }
             if (num == 2)
             {
-                comboBoxClass.Items.Add("甲班");
-                comboBoxClass.Items.Add("乙班");
+                comboBoxClass.Items.Add("甲");
+                comboBoxClass.Items.Add("乙");
             }
             if (num == 3)
             {
-                comboBoxClass.Items.Add("甲班");
-                comboBoxClass.Items.Add("乙班");
-                comboBoxClass.Items.Add("丙班");
+                comboBoxClass.Items.Add("甲");
+                comboBoxClass.Items.Add("乙");
+                comboBoxClass.Items.Add("丙");
             }
             comboBoxClass.SelectedIndex = 0;
         }
