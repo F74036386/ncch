@@ -80,6 +80,45 @@ namespace ncch
             }
         }
 
+        public void serchForDataGridByLin(string departId, bool checkConflic)////      has not written
+        {
+            /////use  addCourseToDataGridView(courseData c) to add course
+            /////use  isconflict(courseData c)       to check isconflic
+            if (!File.Exists(@"./data/courseOut" + departId + ".txt"))
+            {
+                MessageBox.Show("沒有該系所的課程資料，請先更新");
+                return;
+            }
+            StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
+            string alldata = sr.ReadToEnd();
+            sr.Close();
+            if (alldata == null) return;
+            Console.WriteLine("did" + departId);
+            string[] lines = Regex.Split(alldata, "\n");
+            if (checkConflic)
+            {
+                foreach (string cur in lines)
+                {
+                    if (cur != null)
+                    {
+                        courseData co = dataStringToCourseData(cur);
+                        if (!isconflict(co)) addCourseToDataGridView(co);
+                    }
+                }
+            }
+            else
+            {
+                foreach (string cur in lines)
+                {
+                    if (cur != null)
+                    {
+                        courseData co = dataStringToCourseData(cur);
+                        addCourseToDataGridView(co);
+                    }
+                }
+            }
+        }
+
         public int howManyClassInTheDepart(string dId, int grade)///has not written
         {
             return 1;
@@ -92,6 +131,7 @@ namespace ncch
        
         private void addCourseToDataGridView(courseData c)
         {
+            if (c == null) return;
             string[] row = new string[13];
             row[0] = c.departmentId;
             row[1] = c.courseId;
