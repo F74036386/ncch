@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 
 namespace ncch
@@ -17,6 +18,10 @@ namespace ncch
 
     public partial class Form1 : Form
     {
+        /***** definition *****/
+        private string deptDataPath = @"./data/deptData.txt";
+
+
         /********************class menber varible*******************/
         private Label[][] courseTableLabel;
         public bool isTemOutBusy;
@@ -358,183 +363,6 @@ namespace ncch
                 str = sr.ReadLine();
             }
             sr.Close();
-        }
-
-        public void fatchMenu()
-        {
-            if (backgroundFatchMenu.IsBusy == false)
-            {
-                backgroundFatchMenu.RunWorkerAsync();
-               
-            }
-        }
-
-        private void backgroundFatchMenu_DoWork(object sender, DoWorkEventArgs e)
-        {   //implement by backgroundWorker (thread)
-            Regex findLSpaces = new Regex(@"\s*\(\s*", RegexOptions.Compiled);
-            Regex findRSpaces = new Regex(@"\s*）\s*", RegexOptions.Compiled);
-            Regex findUnnecessarySpaces = new Regex(@"\s+", RegexOptions.Compiled);
-            Regex findTitle = new Regex(@">.*<", RegexOptions.Compiled);
-
-            Console.WriteLine(">start fatching");
-            WebClient web = new WebClient();
-            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/");
-            Console.WriteLine(">download finished");
-
-            //change encoding
-            string input = Encoding.UTF8.GetString(html);
-            string[] lines = Regex.Split(input, "\n");
-
-            Console.WriteLine(">matching data...");
-
-            MatchCollection datas = null;
-            int idx;
-            for (idx = 0; idx < lines.Length; idx++)    //find location of course data
-                if (Regex.IsMatch(lines[idx], "課程資訊請洽超連結網頁之相關人員!")) break;
-
-            for (; idx < lines.Length; idx++)
-            {
-                if (Regex.IsMatch(lines[idx], "<li>"))
-                {
-                    datas = Regex.Matches(lines[idx], @"<a.*?a>");
-                    break;
-                }
-            }
-
-            if (idx >= lines.Length || datas == null)
-            {
-                //failed
-                Console.WriteLine(">failed to match data");
-                return;
-            }
-
-            if (!Directory.Exists(@"./data"))
-            {
-                Directory.CreateDirectory(@"./data");
-            }
-
-
-            /****************what's this?*****************/
-            while (isCourseIdBusy) { ;};
-            isCourseIdBusy = true;
-            StreamWriter fout = new StreamWriter("./data/tempOut.txt");    //for debug
-            StreamWriter fidout = new StreamWriter(@"./data/courseId.txt");
-
-            string tmp;
-            foreach (Match cur in datas)
-            {
-                //replace useless string data
-                tmp = findTitle.Match(cur.Value).Value;
-                tmp = findLSpaces.Replace(tmp, "(");
-                tmp = findRSpaces.Replace(tmp, ")");
-                tmp = findUnnecessarySpaces.Replace(tmp, " ");
-                string title = tmp.Substring(5, tmp.Length - 6);
-                string id = tmp.Substring(2, 2);
-
-                fout.WriteLine(id + "  " + title);
-                fidout.WriteLine(id);
-            }
-            fidout.Flush(); fidout.Close();
-            fout.Flush(); fout.Close();
-
-            Console.WriteLine(">done!");
-            isTemOutBusy = false;
-            isCourseIdBusy = false;
-        }
-
-        public void fatchCourse(string depr)
-        {
-           if(backgroundFatchCourse.IsBusy == false)
-            {
-                backgroundFatchCourse.RunWorkerAsync(depr);
-              
-            }
-        }
-
-        private void backgroundFatchCourse_DoWork(object sender, DoWorkEventArgs e)
-        {
-            isFatchCourseBusy = true;
-            Regex findHtmlTag = new Regex(@"<.*?>", RegexOptions.Compiled);
-            Regex findTD = new Regex(@"<TD.*?TD>", RegexOptions.Compiled);
-
-            Console.WriteLine(">start fatching");
-            WebClient web = new WebClient();
-            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + (string)e.Argument);
-            Console.WriteLine(">download finished");
-
-            string input = Encoding.UTF8.GetString(html);
-
-            string[] lines = Regex.Split(input, "\n");
-
-            StreamWriter fout = new StreamWriter(@"./data/courseOut"+e.Argument+".txt");
-
-            int i = 0;
-            string id = null,
-                cls = null,
-                grade = null,
-                type = null,
-                english = null,
-                name = null,
-                necessary = null,
-                point = null,
-                teacher = null,
-                time = null,
-                place = null,
-                other = null;
-
-            foreach (string cur in lines)
-            {   //bug here
-                if (findTD.IsMatch(cur))
-                {
-                    switch (++i)
-                    {
-                        case 3:
-                            id = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 6:
-                            cls = findHtmlTag.Replace(cur, ""); ;
-                            break;
-                        case 7:
-                            grade = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 8:
-                            type = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 10:
-                            english = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 11:
-                            name = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 12:
-                            necessary = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 13:
-                            string tmp = findHtmlTag.Replace(cur, "");
-                            point = tmp.Substring(0, 1);
-                            teacher = tmp.Substring(1);
-                            break;
-                        case 16:
-                            time = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 17:
-                            place = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 18:
-                            other = findHtmlTag.Replace(cur, "");
-                            break;
-                        case 23:
-                            i = 0;
-                            fout.WriteLine("departmentId="+(string)e.Argument +"\tcourseId="+id + "\tcls=" + cls + "\tgrade=" + grade + "\ttype=" + type + "\tenglish=" + english + "\tname=" + name + "\tnecessary=" + necessary + "\tpoint=" + point + "\tteacher=" + teacher + "\ttime=" + time + "\tplace=" + place + "\tother=" + other);
-                            break;
-                    }
-                }
-            }
-            fout.Flush();
-            fout.Close();
-            isFatchCourseBusy = false;
-            Console.WriteLine("fatchCourseFinish");
-
         }
 
         private string getTooltipString(courseData course)
@@ -1215,7 +1043,208 @@ namespace ncch
             dataGridView1.Rows.Clear();
             serchForDataGrid(dep, checkBoxKeepFromCoinsedance.Checked);
         }
+
+
+        /*****************************************************************************/
+        /****************************** code by wwolfyTC *****************************/
+        /*****************************************************************************/
+
+        private void btnDebug_Click(object sender, EventArgs e)
+        {
+            fatchMenu();
+            fatchCourse("A9");
+        }
+
+        private void backgroundFatchMenu_DoWork(object sender, DoWorkEventArgs e)
+        {   //implement by backgroundWorker (thread)
+            Regex findLSpaces = new Regex(@"\s*\(\s*", RegexOptions.Compiled);
+            Regex findRSpaces = new Regex(@"\s*）\s*", RegexOptions.Compiled);
+            Regex findUnnecessarySpaces = new Regex(@"\s+", RegexOptions.Compiled);
+            Regex findTitle = new Regex(@">.*<", RegexOptions.Compiled);
+
+            Console.WriteLine(">start fatching");
+            WebClient web = new WebClient();
+            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/");
+            Console.WriteLine(">download finished");
+
+            //change encoding
+            string input = Encoding.UTF8.GetString(html);
+            string[] lines = Regex.Split(input, "\n");
+
+            Console.WriteLine(">matching data...");
+
+            MatchCollection datas = null;
+            int idx;
+            for (idx = 0; idx < lines.Length; idx++)    //find location of course data
+                if (Regex.IsMatch(lines[idx], "課程資訊請洽超連結網頁之相關人員!")) break;
+
+            for (; idx < lines.Length; idx++)
+            {
+                if (Regex.IsMatch(lines[idx], "<li>"))
+                {
+                    datas = Regex.Matches(lines[idx], @"<a.*?a>");
+                    break;
+                }
+            }
+
+            if (idx >= lines.Length || datas == null)
+            {
+                //failed
+                Console.WriteLine(">failed to match data");
+                return;
+            }
+
+            if (!Directory.Exists(@"./data"))
+            {
+                Directory.CreateDirectory(@"./data");
+            }
+
+
+            StreamWriter fout = new StreamWriter(deptDataPath);
+
+            string tmp;
+            foreach (Match cur in datas)
+            {
+                //replace useless string data
+                tmp = findTitle.Match(cur.Value).Value;
+                tmp = findLSpaces.Replace(tmp, "(");
+                tmp = findRSpaces.Replace(tmp, ")");
+                tmp = findUnnecessarySpaces.Replace(tmp, " ");
+                string title = tmp.Substring(5, tmp.Length - 6);
+                string id = tmp.Substring(2, 2);
+
+                fout.WriteLine(id + "  " + title);
+            }
+            fout.Flush(); fout.Close();
+
+            Console.WriteLine(">done!");
+            isTemOutBusy = false;
+            isCourseIdBusy = false;
+        }
+
+        private void backgroundFatchCourse_DoWork(object sender, DoWorkEventArgs e)
+        {
+            isFatchCourseBusy = true;
+            Regex findHtmlTag = new Regex(@"<.*?>", RegexOptions.Compiled);
+            Regex findTD = new Regex(@"<TD.*?TD>", RegexOptions.Compiled);
+
+            Console.WriteLine(">start fatching");
+            WebClient web = new WebClient();
+            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + (string)e.Argument);
+            Console.WriteLine(">download finished");
+
+            string input = Encoding.UTF8.GetString(html);
+
+            string[] lines = Regex.Split(input, "\n");
+
+            StreamWriter fout = new StreamWriter(@"./data/courseData" + e.Argument + ".txt");
+
+            int i = 0;
+            string id = null,
+                cls = null,
+                grade = null,
+                type = null,
+                english = null,
+                name = null,
+                necessary = null,
+                point = null,
+                teacher = null,
+                time = null,
+                place = null,
+                other = null;
+
+            foreach (string cur in lines)
+            {   //bug here
+                if (findTD.IsMatch(cur))
+                {
+                    switch (++i)
+                    {
+                        case 3:
+                            id = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 6:
+                            cls = findHtmlTag.Replace(cur, ""); ;
+                            break;
+                        case 7:
+                            grade = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 8:
+                            type = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 10:
+                            english = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 11:
+                            name = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 12:
+                            necessary = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 13:
+                            string tmp = findHtmlTag.Replace(cur, "");
+                            point = tmp.Substring(0, 1);
+                            teacher = tmp.Substring(1);
+                            break;
+                        case 16:
+                            time = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 17:
+                            place = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 18:
+                            other = findHtmlTag.Replace(cur, "");
+                            break;
+                        case 23:
+                            i = 0;
+                            fout.WriteLine("departmentId=" + (string)e.Argument + 
+                                "\tcourseId=" + id + 
+                                "\tcls=" + cls + 
+                                "\tgrade=" + grade + 
+                                "\ttype=" + type + 
+                                "\tenglish=" + english + 
+                                "\tname=" + name + 
+                                "\tnecessary=" + necessary + 
+                                "\tpoint=" + point + 
+                                "\tteacher=" + teacher + 
+                                "\ttime=" + time + 
+                                "\tplace=" + place + 
+                                "\tother=" + other);
+                            break;
+                    }
+                }
+            }
+            fout.Flush();
+            fout.Close();
+            isFatchCourseBusy = false;
+            Console.WriteLine(">fatchCourseFinish");
+
+        }
+
+        public void fatchMenu()
+        {
+            if (backgroundFatchMenu.IsBusy == false)
+            {
+                backgroundFatchMenu.RunWorkerAsync();
+
+            }
+        }
+
+        public void fatchCourse(string dept)
+        {
+            if (backgroundFatchCourse.IsBusy == false)
+            {
+                backgroundFatchCourse.RunWorkerAsync(dept);
+            }
+            else
+            {
+                Console.WriteLine(">error: background worker of course fatch is busy!");
+            }
+        }
     }
+
+
+
+
 
 
     public class courseData
