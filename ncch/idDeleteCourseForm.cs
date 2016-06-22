@@ -29,14 +29,15 @@ namespace ncch
             string cId = "";
             if (textBox1.Text != "") dId = textBox1.Text;
             if (textBox2.Text != "") cId = textBox2.Text;
-            courseData co = mainform.serchCourseById(dId,cId);
+           // courseData co = mainform.serchCourseById(dId,cId);
+            courseData co = mainform.serchCourseByIdByLin(dId, cId);///waiting to delete
             if (co == null)
             {
                 MessageBox.Show("代碼錯誤");
             }
             else
             {
-                mainform.addCourseToTable(co);
+                mainform.deleteCourseFromTable(co);
             }
         }
     }

@@ -114,6 +114,7 @@
             this.serch.TabIndex = 15;
             this.serch.Text = "查詢";
             this.serch.UseVisualStyleBackColor = true;
+            this.serch.Click += new System.EventHandler(this.serch_Click);
             // 
             // backgroundFatchMenu
             // 
@@ -153,28 +154,28 @@
             // 課程更新ToolStripMenuItem
             // 
             this.課程更新ToolStripMenuItem.Name = "課程更新ToolStripMenuItem";
-            this.課程更新ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.課程更新ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.課程更新ToolStripMenuItem.Text = "課程更新";
             this.課程更新ToolStripMenuItem.Click += new System.EventHandler(this.課程更新ToolStripMenuItem_Click);
             // 
             // 儲存課表ToolStripMenuItem
             // 
             this.儲存課表ToolStripMenuItem.Name = "儲存課表ToolStripMenuItem";
-            this.儲存課表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.儲存課表ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.儲存課表ToolStripMenuItem.Text = "儲存課表";
             this.儲存課表ToolStripMenuItem.Click += new System.EventHandler(this.儲存課表ToolStripMenuItem_Click);
             // 
             // 匯入課表ToolStripMenuItem
             // 
             this.匯入課表ToolStripMenuItem.Name = "匯入課表ToolStripMenuItem";
-            this.匯入課表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.匯入課表ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.匯入課表ToolStripMenuItem.Text = "匯入課表";
             this.匯入課表ToolStripMenuItem.Click += new System.EventHandler(this.匯入課表ToolStripMenuItem_Click);
             // 
             // 課表重設ToolStripMenuItem
             // 
             this.課表重設ToolStripMenuItem.Name = "課表重設ToolStripMenuItem";
-            this.課表重設ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.課表重設ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.課表重設ToolStripMenuItem.Text = "課表重設";
             this.課表重設ToolStripMenuItem.Click += new System.EventHandler(this.課表重設ToolStripMenuItem_Click);
             // 

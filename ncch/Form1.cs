@@ -67,9 +67,26 @@ namespace ncch
         {
             /////use  addCourseToDataGridView(courseData c) to add course
             /////use  isconflict(courseData c)       to check isconflic
+            if (checkConflic)
+            {
 
+            }
+            else
+            {
+
+            }
         }
 
+        public int howManyClassInTheDepart(string dId, int grade)///has not written
+        {
+            return 1;
+        }
+       
+        public int howManyGradeInTheDepart(string dId)   ///has not written
+        {
+            return 1;
+        }
+       
         private void addCourseToDataGridView(courseData c)
         {
             string[] row = new string[13];
@@ -88,7 +105,7 @@ namespace ncch
             row[12] = c.other;
             dataGridView1.Rows.Add(row);
         }
-
+  
         public courseData serchCourseByIdByLin(string departId, string courseId)////     just for debug
         {
             StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
@@ -181,6 +198,7 @@ namespace ncch
             isTemOutBusy = false;
             comboBoxShow.SelectedIndex = 0;
             comboBoxShow.DropDownStyle = ComboBoxStyle.DropDownList;
+            checkBoxKeepFromCoinsedance.Checked = false;
         }
 
         private void iniToolTipOfLabelForTable()
@@ -934,7 +952,7 @@ namespace ncch
         {
             for (int i = 0; i < amountOfCourseHasSelected; i++)
             {
-                if (course.Equals(courseChoosedList[i]))
+                if ((course.departmentId==courseChoosedList[i].departmentId)&&(course.courseId==courseChoosedList[i].courseId))
                 {
                     return true;
                 }
@@ -1189,6 +1207,13 @@ namespace ncch
         private void 課表重設ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             restartCourseTable();
+        }
+
+        private void serch_Click(object sender, EventArgs e)
+        {
+            string dep = comboBoxShow.Text.ToCharArray()[0].ToString() + comboBoxShow.Text.ToCharArray()[1].ToString();
+            dataGridView1.Rows.Clear();
+            serchForDataGrid(dep, checkBoxKeepFromCoinsedance.Checked);
         }
     }
 
