@@ -80,7 +80,7 @@ namespace ncch
             }
         }
 
-        public void serchForDataGridByLin(string departId, bool checkConflic)////      has not written
+        public void serchForDataGridByLin(string departId, bool checkConflic)////     just for debug
         {
             /////use  addCourseToDataGridView(courseData c) to add course
             /////use  isconflict(courseData c)       to check isconflic
