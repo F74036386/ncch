@@ -57,11 +57,22 @@ namespace ncch
             iniDataGrid();
         }
 
-        public courseData serchCourseById(string departId, string courseId)////     has not written
+        public courseData searchCourseById(string departId, string courseId)////     has not written
         {
-            //   give id and return courseData   
-            //if cannot find return null  
-           return null;
+            if (!File.Exists(@"./data/courseData" + departId + ".txt"))
+            {
+                Console.WriteLine(">error: can't find course file " + departId);
+                return null;
+            }
+
+            Regex findID = new Regex(courseId, RegexOptions.Compiled);
+            StreamReader fin = new StreamReader(@"./data/courseData" + departId + ".txt");
+
+            string cur;
+            while((cur = fin.ReadLine()) != null)
+                if (findID.IsMatch(cur))    return dataStringToCourseData(cur);
+
+            return null;
         }
 
         public void inputNessarry(string department,string grade,string cls)////    has not written
@@ -200,7 +211,7 @@ namespace ncch
             StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
 
             string tem1 = sr1.ReadLine();
-            Console.WriteLine("tem" + tem1);
+            //Console.WriteLine("tem " + tem1);
             while (tem1 != null)
             {
                 comboBoxShow.Items.Add(tem1);
@@ -984,9 +995,9 @@ namespace ncch
 
         private courseData dataStringToCourseData(string s)
         {
-            courseData co = new courseData();
             if (s == null) return null;
-            Console.WriteLine(s);
+            courseData co = new courseData();
+            //Console.WriteLine(s);
             string[] lines= Regex.Split(s, "\t");
            
             Regex findDId = new Regex(@"departmentId=.*?", RegexOptions.Compiled);
@@ -1129,8 +1140,14 @@ namespace ncch
 
         private void btnDebug_Click(object sender, EventArgs e)
         {
-            fatchMenu();
-            fatchCourse("A9");
+            Console.WriteLine(">begin debug");
+            //fatchMenu();
+            //fatchCourse("A9");
+
+            courseData dat = searchCourseById("A9", "010");
+            Console.WriteLine(dat.ToString());
+
+            Console.WriteLine(">end debug");
         }
 
         private void backgroundFatchMenu_DoWork(object sender, DoWorkEventArgs e)
@@ -1358,6 +1375,11 @@ namespace ncch
             time = sample.time;
             place = sample.place;
             other = sample.other;           
+        }
+
+        public override string ToString()
+        {
+            return (departmentId + " " + courseId);
         }
     }
 }

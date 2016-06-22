@@ -29,7 +29,7 @@ namespace ncch
             if (textBox1.Text != "") dId = textBox1.Text;
             if (textBox2.Text != "") cId = textBox2.Text;
             //courseData cour = mainForm.serchCourseByIdByLin(dId, cId);///waiting to delete
-            courseData cour = mainForm.serchCourseById(dId, cId);
+            courseData cour = mainForm.searchCourseById(dId, cId);
             if (cour != null)
             {
                 mainForm.addCourseToTable(cour);
