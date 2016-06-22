@@ -37,12 +37,9 @@ namespace ncch
 
         public Form1()                   //  to initial 
         {
-            isTemOutBusy = true;
+            isTemOutBusy = false;
             isCourseIdBusy = false;
             isFatchCourseBusy = false;
-            if (!Directory.Exists((@"./data"))) Directory.CreateDirectory(@"./data");
-            if (!File.Exists(@"./data/tempOut.txt")) fetchMenuByFile();
-            isTemOutBusy = false;
             InitializeComponent();
             initialCourseTableLabel();
             iniCourseDataTable();
@@ -111,10 +108,6 @@ namespace ncch
   
         public courseData serchCourseByIdByLin(string departId, string courseId)////     just for debug
         {
-            if(!File.Exists(@"./data/courseOut" + departId + ".txt")){
-                MessageBox.Show("沒有該系所的課程資料，請先更新");
-                return null;
-            }
             StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
             string alldata = sr.ReadToEnd();
             sr.Close();
@@ -189,7 +182,8 @@ namespace ncch
             dataGridView1.Columns[10].Name = "學分數";
             dataGridView1.Columns[11].Name = "課程類別";
             dataGridView1.Columns[12].Name = "備註";
-           
+            if (!Directory.Exists((@"./data"))) Directory.CreateDirectory(@"./data");
+            if (!File.Exists(@"./data/tempOut.txt")) fetchMenuByFile();
             while (isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
             isTemOutBusy = true;
             StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
