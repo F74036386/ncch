@@ -45,9 +45,12 @@ namespace ncch
             isTemOutBusy = true;
             isCourseIdBusy = false;
             isFatchCourseBusy = false;
+
             if (!Directory.Exists((@"./data"))) Directory.CreateDirectory(@"./data");
-            if (!File.Exists(@"./data/tempOut.txt")) fetchMenuByFile();
+            if (!File.Exists(deptDataPath)) fetchMenu();
+
             isTemOutBusy = false;
+
             InitializeComponent();
             initialCourseTableLabel();
             iniCourseDataTable();
@@ -57,12 +60,17 @@ namespace ncch
             iniDataGrid();
         }
 
-        public courseData searchCourseById(string departId, string courseId)////     has not written
+        public courseData searchCourseById(string departId, string courseId)
         {
             if (!File.Exists(@"./data/courseData" + departId + ".txt"))
             {
                 Console.WriteLine(">error: can't find course file " + departId);
-                return null;
+                if(MessageBox.Show("這個系所的課程還沒有被下載，\n是否要現在更新?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    fetchCourse(departId);
+                    MessageBox.Show("課程下載完畢!");
+                }
+                else return null;
             }
 
             Regex findID = new Regex(courseId, RegexOptions.Compiled);
@@ -74,43 +82,41 @@ namespace ncch
 
             return null;
         }
-
+        /*
         public void inputNessarry(string departId,string grade,string cls)////    has not written
         {
            //use function addCourseToTable(courseData course)   to add course;
             
             return;
         }
-
-        public void inputNessarryByLin(string departId, string grade, string cls)////    has not written
+        */
+        public void inputNessarry(string departId, string grade, string cls)////    has not written
         {
             //use function addCourseToTable(courseData course)   to add course;
-            if (!File.Exists(@"./data/courseOut" + departId + ".txt"))
+            if (!File.Exists(@"./data/courseData" + departId + ".txt"))
             {
                 MessageBox.Show("沒有該系所的課程資料，請先更新");
                 return;
             }
-            StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
+            StreamReader sr = new StreamReader(@"./data/courseData" + departId + ".txt");
             string alldata = sr.ReadToEnd();
             sr.Close();
+
             if (alldata == null) return;
-            Console.WriteLine("did" + departId);
             string[] lines = Regex.Split(alldata, "\n");
+
             foreach (string cur in lines)
             {
+                Console.WriteLine(cur);
                 if (cur != null)
                 {
                     courseData co = dataStringToCourseData(cur);
                     if(co==null)continue;
-                    if (co.necessary == "必修")
+                    if (co.courseId != "" && co.necessary == "必修" && co.grade == grade)
                     {
-                        if (co.grade == grade)
-                        {   
-                            if (co.cls == null || co.cls == cls)
-                            {
-                                if (co.courseId == "") continue;
-                                addCourseToTable(co);
-                            }
+                        if (co.cls.IndexOf(cls[0]) != -1)
+                        {
+                            addCourseToTable(co);
                         }
                     }
                 }
@@ -118,8 +124,8 @@ namespace ncch
 
             return;
         }
-
-        public void serchForDataGrid(string department, bool checkConflic)////      has not written
+        /*
+        public void searchForDataGrid(string department, bool checkConflic)////      has not written
         {
             /////use  addCourseToDataGridView(courseData c) to add course
             /////use  isconflict(courseData c)       to check isconflic
@@ -132,17 +138,22 @@ namespace ncch
 
             }
         }
-
-        public void serchForDataGridByLin(string departId, bool checkConflic)////     just for debug
+        */
+        public void searchForDataGrid(string departId, bool checkConflic)////     just for debug
         {
             /////use  addCourseToDataGridView(courseData c) to add course
             /////use  isconflict(courseData c)       to check isconflic
-            if (!File.Exists(@"./data/courseOut" + departId + ".txt"))
+            if (!File.Exists(@"./data/courseData" + departId + ".txt"))
             {
-                MessageBox.Show("沒有該系所的課程資料，請先更新");
-                return;
+                if (MessageBox.Show("這個系所的課程還沒有被下載，\n是否要現在更新?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    fetchCourse(departId);
+                    MessageBox.Show("課程下載完畢!");
+                }
+                else return;
             }
-            StreamReader sr = new StreamReader(@"./data/courseOut" + departId + ".txt");
+
+            StreamReader sr = new StreamReader(@"./data/courseData" + departId + ".txt");
             string alldata = sr.ReadToEnd();
             sr.Close();
             if (alldata == null) return;
@@ -285,7 +296,7 @@ namespace ncch
            
             while (isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
             isTemOutBusy = true;
-            StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
+            StreamReader sr1 = new StreamReader(deptDataPath);
 
             string tem1 = sr1.ReadLine();
             //Console.WriteLine("tem " + tem1);
@@ -436,99 +447,6 @@ namespace ncch
                 courseChoosedList[amountOfCourseHasSelected - 1] = null;
             }
             amountOfCourseHasSelected--;
-        }
-
-        private void fatchAllCourse()
-        {
-            while (isCourseIdBusy) { ;};
-            StreamReader sr = new StreamReader(@"./data/courseId.txt");
-            backgroundFatchCourse.WorkerSupportsCancellation = true; ;
-            string str = sr.ReadLine();
-            while (str != null)
-            {
-                while (backgroundFatchCourse.IsBusy) {;};
-
-                Console.WriteLine("ll");
-                while (backgroundFatchCourse.IsBusy) { ;};
-                Console.WriteLine("lll");
-                fatchCourse(str);
-                Console.WriteLine(str);
-                str = sr.ReadLine();
-            }
-            sr.Close();
-        }
-
-        public void fetchMenuByFile()
-        {
-            Regex findLSpaces = new Regex(@"\s*\(\s*", RegexOptions.Compiled);
-            Regex findRSpaces = new Regex(@"\s*）\s*", RegexOptions.Compiled);
-            Regex findUnnecessarySpaces = new Regex(@"\s+", RegexOptions.Compiled);
-            Regex findTitle = new Regex(@">.*<", RegexOptions.Compiled);
-
-            Console.WriteLine(">start fatching");
-            WebClient web = new WebClient();
-            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/");
-            Console.WriteLine(">download finished");
-
-            //change encoding
-            string input = Encoding.UTF8.GetString(html);
-            string[] lines = Regex.Split(input, "\n");
-
-            Console.WriteLine(">matching data...");
-
-            MatchCollection datas = null;
-            int idx;
-            for (idx = 0; idx < lines.Length; idx++)    //find location of course data
-                if (Regex.IsMatch(lines[idx], "課程資訊請洽超連結網頁之相關人員!")) break;
-
-            for (; idx < lines.Length; idx++)
-            {
-                if (Regex.IsMatch(lines[idx], "<li>"))
-                {
-                    datas = Regex.Matches(lines[idx], @"<a.*?a>");
-                    break;
-                }
-            }
-
-            if (idx >= lines.Length || datas == null)
-            {
-                //failed
-                Console.WriteLine(">failed to match data");
-                return;
-            }
-
-            if (!Directory.Exists(@"./data"))
-            {
-                Directory.CreateDirectory(@"./data");
-            }
-
-
-            /****************what's this?*****************/
-            while (isCourseIdBusy) { ;};
-            isCourseIdBusy = true;
-            StreamWriter fout = new StreamWriter("./data/tempOut.txt");    //for debug
-            StreamWriter fidout = new StreamWriter(@"./data/courseId.txt");
-
-            string tmp;
-            foreach (Match cur in datas)
-            {
-                //replace useless string data
-                tmp = findTitle.Match(cur.Value).Value;
-                tmp = findLSpaces.Replace(tmp, "(");
-                tmp = findRSpaces.Replace(tmp, ")");
-                tmp = findUnnecessarySpaces.Replace(tmp, " ");
-                string title = tmp.Substring(5, tmp.Length - 6);
-                string id = tmp.Substring(2, 2);
-
-                fout.WriteLine(id + "  " + title);
-                fidout.WriteLine(id);
-            }
-            fidout.Flush(); fidout.Close();
-            fout.Flush(); fout.Close();
-
-            Console.WriteLine(">done!");
-            isTemOutBusy = false;
-            isCourseIdBusy = false;
         }
 
         private string getTooltipString(courseData course)
@@ -1207,7 +1125,7 @@ namespace ncch
         {
             string dep = comboBoxShow.Text.ToCharArray()[0].ToString() + comboBoxShow.Text.ToCharArray()[1].ToString();
             dataGridView1.Rows.Clear();
-            serchForDataGrid(dep, checkBoxKeepFromCoinsedance.Checked);
+            searchForDataGrid(dep, checkBoxKeepFromCoinsedance.Checked);
         }
 
 
@@ -1227,7 +1145,7 @@ namespace ncch
             Console.WriteLine(">end debug");
         }
 
-        private void backgroundFatchMenu_DoWork(object sender, DoWorkEventArgs e)
+        public void fetchMenu()
         {   //implement by backgroundWorker (thread)
             Regex findLSpaces = new Regex(@"\s*\(\s*", RegexOptions.Compiled);
             Regex findRSpaces = new Regex(@"\s*）\s*", RegexOptions.Compiled);
@@ -1294,7 +1212,7 @@ namespace ncch
             isCourseIdBusy = false;
         }
 
-        private void backgroundFatchCourse_DoWork(object sender, DoWorkEventArgs e)
+        public void fetchCourse(string dept)
         {
             isFatchCourseBusy = true;
             Regex findHtmlTag = new Regex(@"<.*?>", RegexOptions.Compiled);
@@ -1302,14 +1220,14 @@ namespace ncch
 
             Console.WriteLine(">start fatching");
             WebClient web = new WebClient();
-            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + (string)e.Argument);
+            byte[] html = web.DownloadData("http://course-query.acad.ncku.edu.tw/qry/qry001.php?dept_no=" + dept);
             Console.WriteLine(">download finished");
 
             string input = Encoding.UTF8.GetString(html);
 
             string[] lines = Regex.Split(input, "\n");
 
-            StreamWriter fout = new StreamWriter(@"./data/courseData" + e.Argument + ".txt");
+            StreamWriter fout = new StreamWriter(@"./data/courseData" + dept + ".txt");
 
             int i = 0;
             string id = null,
@@ -1335,10 +1253,12 @@ namespace ncch
                             id = findHtmlTag.Replace(cur, "");
                             break;
                         case 6:
-                            cls = findHtmlTag.Replace(cur, ""); ;
+                            cls = findHtmlTag.Replace(cur, "");
+                            cls = cls.Replace(" ", "");
                             break;
                         case 7:
                             grade = findHtmlTag.Replace(cur, "");
+                            grade = grade.Replace(" ", "");
                             break;
                         case 8:
                             type = findHtmlTag.Replace(cur, "");
@@ -1368,7 +1288,7 @@ namespace ncch
                             break;
                         case 23:
                             i = 0;
-                            fout.WriteLine("departmentId=" + (string)e.Argument + 
+                            fout.WriteLine("departmentId=" + dept + 
                                 "\tcourseId=" + id + 
                                 "\tcls=" + cls + 
                                 "\tgrade=" + grade + 
@@ -1391,27 +1311,27 @@ namespace ncch
             Console.WriteLine(">fatchCourseFinish");
 
         }
-
-        public void fatchMenu()
+        /*
+        public void fetchMenu()
         {
-            if (backgroundFatchMenu.IsBusy == false)
-            {
-                backgroundFatchMenu.RunWorkerAsync();
-
-            }
+            backgroundFatchMenu_DoWork();
         }
 
-        public void fatchCourse(string dept)
+        public void fetchCourse(string dept)
         {
             if (backgroundFatchCourse.IsBusy == false)
             {
                 backgroundFatchCourse.RunWorkerAsync(dept);
+
+                bool running;
+                while (true)
+                {
+                    running = backgroundFatchCourse.IsBusy;
+                    if (!running) break;
+                }
+                Console.WriteLine(">leave fetch function");
             }
-            else
-            {
-                Console.WriteLine(">error: background worker of course fatch is busy!");
-            }
-        }
+        }*/
     }
 
 
@@ -1458,5 +1378,6 @@ namespace ncch
         {
             return (departmentId + " " + courseId);
         }
+
     }
 }

@@ -32,9 +32,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.serch = new System.Windows.Forms.Button();
-            this.backgroundFatchMenu = new System.ComponentModel.BackgroundWorker();
-            this.backgroundFatchCourse = new System.ComponentModel.BackgroundWorker();
-            this.dataSet1 = new System.Data.DataSet();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.檔案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.課程更新ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,7 +50,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.btnDebug = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +65,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.5F));
             this.tableLayoutPanel1.Location = new System.Drawing.Point(16, 71);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 15;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -104,7 +100,7 @@
             this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(600, 128);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 24;
             this.dataGridView1.Size = new System.Drawing.Size(1171, 634);
@@ -113,25 +109,13 @@
             // serch
             // 
             this.serch.Location = new System.Drawing.Point(1169, 71);
-            this.serch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.serch.Margin = new System.Windows.Forms.Padding(4);
             this.serch.Name = "serch";
             this.serch.Size = new System.Drawing.Size(100, 29);
             this.serch.TabIndex = 15;
             this.serch.Text = "查詢";
             this.serch.UseVisualStyleBackColor = true;
             this.serch.Click += new System.EventHandler(this.serch_Click);
-            // 
-            // backgroundFatchMenu
-            // 
-            this.backgroundFatchMenu.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundFatchMenu_DoWork);
-            // 
-            // backgroundFatchCourse
-            // 
-            this.backgroundFatchCourse.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundFatchCourse_DoWork);
-            // 
-            // dataSet1
-            // 
-            this.dataSet1.DataSetName = "NewDataSet";
             // 
             // menuStrip1
             // 
@@ -244,7 +228,7 @@
             // 
             this.checkBoxKeepFromCoinsedance.AutoSize = true;
             this.checkBoxKeepFromCoinsedance.Location = new System.Drawing.Point(1003, 76);
-            this.checkBoxKeepFromCoinsedance.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxKeepFromCoinsedance.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxKeepFromCoinsedance.Name = "checkBoxKeepFromCoinsedance";
             this.checkBoxKeepFromCoinsedance.Size = new System.Drawing.Size(119, 19);
             this.checkBoxKeepFromCoinsedance.TabIndex = 16;
@@ -255,7 +239,7 @@
             // 
             this.comboBoxShow.FormattingEnabled = true;
             this.comboBoxShow.Location = new System.Drawing.Point(760, 71);
-            this.comboBoxShow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxShow.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxShow.Name = "comboBoxShow";
             this.comboBoxShow.Size = new System.Drawing.Size(217, 23);
             this.comboBoxShow.TabIndex = 12;
@@ -295,11 +279,10 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "NCKU 選課小幫手";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -313,9 +296,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button serch;
-        private System.ComponentModel.BackgroundWorker backgroundFatchMenu;
-        private System.ComponentModel.BackgroundWorker backgroundFatchCourse;
-        private System.Data.DataSet dataSet1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 檔案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 加退選ToolStripMenuItem;

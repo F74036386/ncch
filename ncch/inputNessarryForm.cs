@@ -41,7 +41,7 @@ namespace ncch
                 //mainform. isTemOutBusy = true;
 
                 //mainform.fatchMenu();
-                if (!File.Exists(@"./data/tempOut.txt")) mainform.fetchMenuByFile();
+                if (!File.Exists(@"./data/deptData.txt")) mainform.fetchMenu();
                 while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
                 mainform.isTemOutBusy = true;
                 StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
@@ -180,10 +180,10 @@ namespace ncch
                //mainform. isTemOutBusy = true;
 
                //mainform.fatchMenu();
-                if (!File.Exists(@"./data/tempOut.txt")) mainform.fetchMenuByFile();
-               while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
-               mainform.isTemOutBusy = true;
-                StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
+                if (!File.Exists(@"./data/deptData.txt")) mainform.fetchMenu();
+                while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
+                mainform.isTemOutBusy = true;
+                StreamReader sr1 = new StreamReader(@"./data/deptData.txt");
 
                 StreamWriter sw1 = new StreamWriter(@"./data/departmentName.txt");
 

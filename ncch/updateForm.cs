@@ -30,10 +30,10 @@ namespace ncch
         private void iniComboBox()       //  have not written
         {
                 comboBox1.Items.Add("目錄");
-                if (!File.Exists(@"./data/tempOut.txt")) mainform.fetchMenuByFile();
+                if (!File.Exists(@"./data/deptData.txt")) mainform.fetchMenu();
                 while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
                 mainform.isTemOutBusy = true;
-                StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
+                StreamReader sr1 = new StreamReader(@"./data/deptData.txt");
                 
                 string tem1 = sr1.ReadLine();
                 Console.WriteLine("tem"+tem1);
@@ -50,15 +50,20 @@ namespace ncch
 
         private void button1_Click(object sender, EventArgs e)
         {
+            LUpdateStatus.Text = "更新中，請稍候...";
+            LUpdateStatus.Update();
+
             if (comboBox1.Text == "目錄")
             {
-                mainform.fatchMenu();
+                mainform.fetchMenu();
             }
             else
             {
-                string de = comboBox1.Text.ToCharArray()[0].ToString() + comboBox1.Text.ToCharArray()[1].ToString();
-                mainform.fatchCourse(de);
+                string de = comboBox1.Text.Substring(0, 2);
+                mainform.fetchCourse(de);
             }
+
+            LUpdateStatus.Text = "更新完成!";
         }
     }
 }
