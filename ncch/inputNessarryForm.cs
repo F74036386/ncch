@@ -263,6 +263,8 @@ namespace ncch
             string grade = comboBoxGrade.Text;
             string cla = comboBoxClass.Text;
             mainform.inputNessarry(depart, grade, cla);
+
+            MessageBox.Show("匯入成功!");
         }
     }
 }

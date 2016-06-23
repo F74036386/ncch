@@ -616,7 +616,7 @@ namespace ncch
 
           }
 
-          MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n加選成功");
+          //MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n加選成功");
         }       
 
         public void deleteCourseFromTable(courseData course)      //to delete course
@@ -758,7 +758,7 @@ namespace ncch
                 toolTipTable[weekday][starttime] = null;
 
             }
-            MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n退選成功");
+            //MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n退選成功");
         }
 
         bool isconflict(courseData course)                  //to check the course time is conflict or not
