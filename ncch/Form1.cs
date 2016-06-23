@@ -111,10 +111,10 @@ namespace ncch
                 if (cur != null)
                 {
                     courseData co = dataStringToCourseData(cur);
-                    if(co==null)continue;
+                    if(co==null)    continue;
                     if (co.courseId != "" && co.necessary == "必修" && co.grade == grade)
                     {
-                        if (co.cls.IndexOf(cls[0]) != -1)
+                        if (co.cls == "" || co.cls.IndexOf(cls[0]) != -1)
                         {
                             addCourseToTable(co);
                         }
