@@ -95,8 +95,13 @@ namespace ncch
             //use function addCourseToTable(courseData course)   to add course;
             if (!File.Exists(@"./data/courseData" + departId + ".txt"))
             {
-                MessageBox.Show("沒有該系所的課程資料，請先更新");
-                return;
+                Console.WriteLine(">error: can't find course file " + departId);
+                if (MessageBox.Show("這個系所的課程還沒有被下載，\n是否要現在更新?", "", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    fetchCourse(departId);
+                    MessageBox.Show("課程下載完畢!");
+                }
+                else return;
             }
             StreamReader sr = new StreamReader(@"./data/courseData" + departId + ".txt");
             string alldata = sr.ReadToEnd();

@@ -256,12 +256,14 @@
             // 
             // btnDebug
             // 
+            this.btnDebug.Enabled = false;
             this.btnDebug.Location = new System.Drawing.Point(1696, 787);
             this.btnDebug.Name = "btnDebug";
             this.btnDebug.Size = new System.Drawing.Size(75, 23);
             this.btnDebug.TabIndex = 19;
             this.btnDebug.Text = "debug";
             this.btnDebug.UseVisualStyleBackColor = true;
+            this.btnDebug.Visible = false;
             this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
             // 
             // Form1
