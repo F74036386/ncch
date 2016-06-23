@@ -437,7 +437,7 @@ namespace ncch
             int k = -1;
             for (int i = 0; i < amountOfCourseHasSelected; i++)
             {
-                if ((course.departmentId == courseChoosedList[i].departmentId) && (course.courseId == courseChoosedList[i].courseId))
+                if ((course.departmentId == courseChoosedList[i].departmentId) && (course.courseId == courseChoosedList[i].courseId) && (course.name == courseChoosedList[i].name))
                 {
                     courseChoosedList[i] = null;
                     k = i;
@@ -511,7 +511,7 @@ namespace ncch
                       for (int j = starttime; j <= endtime; j++)
                       {
                           courseTableData[weekday][j] = course;
-
+                          addLabelColar(courseTableLabel[weekday][j+1], course);
                           if (j != starttime)
                           {
                               tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
@@ -521,7 +521,7 @@ namespace ncch
                       toolTipTable[weekday][starttime] = new ToolTip();
                       toolTipTable[weekday][starttime].SetToolTip(courseTableLabel[weekday][starttime + 1],getTooltipString(course));
                       contexMenuStripTable[weekday][starttime] = setContexMenuStripForLabel(ref courseTableLabel[weekday][starttime + 1], courseTableData[weekday][starttime]);
-                      addLabelColar(courseTableLabel[weekday][starttime + 1],course);
+                   //   addLabelColar(courseTableLabel[weekday][starttime + 1],course);
 
                       tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
 
@@ -601,7 +601,7 @@ namespace ncch
               for (int j = starttime; j <= endtime; j++)
               {
                   courseTableData[weekday][j] = course;
-
+                  addLabelColar(courseTableLabel[weekday][j+1], course);
                   if (j != starttime)
                   {
                       tableLayoutPanel1.Controls.Remove(courseTableLabel[weekday][j + 1]);
@@ -611,7 +611,7 @@ namespace ncch
               toolTipTable[weekday][starttime] = new ToolTip();
               toolTipTable[weekday][starttime].SetToolTip(courseTableLabel[weekday][starttime + 1], getTooltipString(course));
 
-              addLabelColar(courseTableLabel[weekday][starttime + 1],course);
+
               tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], endtime - starttime + 1);
 
           }
@@ -650,7 +650,7 @@ namespace ncch
                         for (int j = starttime; j <= endtime; j++)
                         {
                             courseTableData[weekday][j] = null ;
-
+                            deleteLabelColar(courseTableLabel[weekday][j+1]); 
                             if (j != starttime)
                             {
                                 tableLayoutPanel1.Controls.Add(courseTableLabel[weekday][j + 1]);
@@ -660,7 +660,7 @@ namespace ncch
                       //  courseTableLabel[weekday][starttime + 1].Text = "\n("+weekday.ToString()+","+(starttime+1).ToString()+")\n";
                         courseTableLabel[weekday][starttime + 1].Text = "\n\n";
                         toolTipTable[weekday][starttime] = null;
-                        deleteLabelColar(courseTableLabel[weekday][starttime + 1]);
+                       
 
                         tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1],1);
 
@@ -747,7 +747,7 @@ namespace ncch
                 for (int j = starttime; j <= endtime; j++)
                 {
                     courseTableData[weekday][j] = null;
-                    
+                    deleteLabelColar(courseTableLabel[weekday][j+1]); 
                     if (j != starttime)
                     {
                         tableLayoutPanel1.Controls.Add(courseTableLabel[weekday][j + 1]);
@@ -756,7 +756,7 @@ namespace ncch
               //  courseTableLabel[weekday][starttime + 1].Text =   weekday.ToString() + "," + (starttime + 1).ToString() + "\n";
                 courseTableLabel[weekday][starttime + 1].Text = "\n\n";
                 toolTipTable[weekday][starttime] = null;
-                deleteLabelColar(courseTableLabel[weekday][starttime + 1]); 
+
             }
             MessageBox.Show(course.departmentId + course.courseId + "  " + course.name + "\n退選成功");
         }
@@ -872,7 +872,7 @@ namespace ncch
         {
             for (int i = 0; i < amountOfCourseHasSelected; i++)
             {
-                if ((course.departmentId==courseChoosedList[i].departmentId)&&(course.courseId==courseChoosedList[i].courseId))
+                if ((course.departmentId==courseChoosedList[i].departmentId)&&(course.courseId==courseChoosedList[i].courseId)&&(course.name==courseChoosedList[i].name))
                 {
                     return true;
                 }
@@ -945,7 +945,7 @@ namespace ncch
 
         private string makeSaveString(courseData course)
         {
-            string ss = "departmentId=" + course.departmentId + "\tcoueseId=" + course.courseId + "\tcls=" + course.cls + "\tgrade=" + course.grade + "\ttype=" + course.type + "\tenglish=" + course.english + "\tname=" + course.name + "\tnecessary=" + course.necessary + "\tpoint=" + course.point + "\tteacher=" + course.teacher + "\ttime=" + course.time + "\tplace=" + course.place + "\tother=" + course.other;
+            string ss = "departmentId=" + course.departmentId + "\tcourseId=" + course.courseId + "\tcls=" + course.cls + "\tgrade=" + course.grade + "\ttype=" + course.type + "\tenglish=" + course.english + "\tname=" + course.name + "\tnecessary=" + course.necessary + "\tpoint=" + course.point + "\tteacher=" + course.teacher + "\ttime=" + course.time + "\tplace=" + course.place + "\tother=" + course.other;
             return ss;
         }
 
