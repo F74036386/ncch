@@ -502,6 +502,7 @@ namespace ncch
                   slatch=false;
                   if (weekday != 0)
                   {
+                      if (endtime == -1) endtime = starttime;
                       for (int j = starttime; j <= endtime; j++)
                       {
                           courseTableData[weekday][j] = course;
@@ -591,6 +592,7 @@ namespace ncch
 
           if (weekday != 0)
           {
+              if (endtime == -1) endtime = starttime;
               for (int j = starttime; j <= endtime; j++)
               {
                   courseTableData[weekday][j] = course;
@@ -639,7 +641,7 @@ namespace ncch
                     if (weekday != 0)
                     {
                         tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], 1);
-                        
+                        if (endtime == -1) endtime = starttime;
                         for (int j = starttime; j <= endtime; j++)
                         {
                             courseTableData[weekday][j] = null ;
@@ -736,7 +738,7 @@ namespace ncch
             if (weekday != 0)
             {
                 tableLayoutPanel1.SetRowSpan(courseTableLabel[weekday][starttime + 1], 1);
-                
+                if (endtime == -1) endtime = starttime;
                 for (int j = starttime; j <= endtime; j++)
                 {
                     courseTableData[weekday][j] = null;
