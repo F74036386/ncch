@@ -44,14 +44,16 @@ namespace ncch
                 if (!File.Exists(@"./data/deptData.txt")) mainform.fetchMenu();
                 while (mainform.isTemOutBusy) { ;}           //  avoid open same file by two way in the same time;
                 mainform.isTemOutBusy = true;
-                StreamReader sr1 = new StreamReader(@"./data/tempOut.txt");
+                StreamReader sr1 = new StreamReader(@"./data/deptData.txt");
 
                 StreamWriter sw1 = new StreamWriter(@"./data/departmentName.txt");
 
                 string tem1 = sr1.ReadLine();
+                Console.WriteLine("read: " + tem1);
 
                 while (tem1 != null)
                 {
+                    Console.WriteLine(tem1);
                     char[] temch = tem1.ToCharArray();
 
                     if (temch[0] == 'A')
@@ -87,6 +89,7 @@ namespace ncch
                         continue;
 
                     }
+
                     sw1.WriteLine(tem1);
                     sw1.Flush();
                     tem1 = sr1.ReadLine();
@@ -256,7 +259,7 @@ namespace ncch
         
         private void inputbutton_Click(object sender, EventArgs e)
         {
-            string depart = comboBoxDepartment.Text.ToCharArray()[0].ToString()+comboBoxDepartment.Text.ToCharArray()[1].ToString();
+            string depart = comboBoxDepartment.Text.Substring(0, 2);
             string grade = comboBoxGrade.Text;
             string cla = comboBoxClass.Text;
             mainform.inputNessarry(depart, grade, cla);
